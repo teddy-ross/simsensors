@@ -14,9 +14,11 @@
 
 CFLAGS = -O3 -std=c++11 -Wall -Wextra
 
+SRCDIR = ../../src
+
 HFDIR = $(HOME)/Desktop/hackflight/webots
 
-EXE = test
+EXE = main
 
 all: $(EXE)
 
@@ -26,8 +28,8 @@ run: $(EXE)
 $(EXE): $(EXE).o
 	g++ -o $(EXE) $(EXE).o
 
-$(EXE).o: $(EXE).cpp  *.h*
-	g++ -c -I.. $(EXE).cpp
+$(EXE).o: $(EXE).cpp  $(SRCDIR)/*/*.*
+	g++ -c -I$(SRCDIR) $(EXE).cpp
 
 clean:
 	rm -f $(EXE) *.o

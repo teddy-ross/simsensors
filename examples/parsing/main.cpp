@@ -18,8 +18,8 @@
 
 #include <stdio.h>
 
-#include "world_parser.hpp"
-#include "robot_parser.hpp"
+#include <parsers/world_parser.hpp>
+#include <parsers/robot_parser.hpp>
 
 int main(int argc, char ** argv) 
 {
