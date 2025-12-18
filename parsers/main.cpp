@@ -16,22 +16,29 @@
    along with this program. If not, see <http:--www.gnu.org/licenses/>.
  */
 
+#include <stdio.h>
+
 #include "world_parser.hpp"
 #include "robot_parser.hpp"
 
 int main(int argc, char ** argv) 
 {
-    (void)argc;
+    if (argc < 3) {
+        fprintf(stderr, "Usage: %s WORLDFILE ROBOTFILE\n", argv[0]);
+    }
 
-    const std::string world =  argv[1];
-    static WorldParser _worldParser;
-    _worldParser.parse(world);
-    _worldParser.report();
+    else {
 
-    const std::string robot =  argv[2];
-    static RobotParser _robotParser;
-    _robotParser.parse(robot);
-    _robotParser.report();
+        const std::string world =  argv[1];
+        static WorldParser _worldParser;
+        _worldParser.parse(world);
+        _worldParser.report();
 
-     return 0;
+        const std::string robot =  argv[2];
+        static RobotParser _robotParser;
+        _robotParser.parse(robot);
+        _robotParser.report();
+    }
+
+    return 0;
 }

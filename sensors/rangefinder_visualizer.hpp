@@ -1,5 +1,5 @@
 /* 
-   Rangefinder simulator
+   Rangefinder simulation visualizer using OpenCV
 
    Copyright (C) 2025 Simon D. Levy
 
