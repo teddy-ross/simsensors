@@ -21,8 +21,9 @@
 class SimRangefinder {
 
     friend class RangefinderVisualizer;
+    friend class RobotParser;
 
-    public:
+    private:
 
         int width;
         int height; 
@@ -30,39 +31,12 @@ class SimRangefinder {
         double max_distance_m;
         double field_of_view_radians;
 
-        SimRangefinder()
-        {
-        }
+    public:
 
-        SimRangefinder(
-                const int width,
-                const int height, 
-                const double min_distance_m,
-                const double max_distance_m,
-                const double field_of_view_radians)
+        void read(const vector<Wall *> walls, double * distances_m)
         {
-            this->width = width;
-            this->height = height; 
-            this->min_distance_m = min_distance_m;
-            this->max_distance_m = max_distance_m;
-            this->field_of_view_radians = field_of_view_radians;
-        }
-
-        void report(const int16_t * distance_mm) 
-        {
-            for (int i=0; i<8; ++i) {
-                for (int j=0; j<8; ++j) {
-                    const int16_t d = distance_mm[i*8+j];
-                    if (d < 0) {
-                        printf(" ---- ");
-                    }
-                    else {
-                        printf("%5d ", d);
-                    }
-                }
-                printf("\n \n \n");
-            }
-            printf("\n-----------------------------------------------\n \n");
+            (void)walls;
+            (void)distances_m;
         }
 
         void dump()
