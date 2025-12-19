@@ -32,25 +32,31 @@ class ParserUtils {
 
     public:
 
-        static void try_parse_double(const string line, const string field_name,
+        static bool try_parse_double(const string line, const string field_name,
                 double & value) 
         {
             if (string_contains(line, field_name)) {
                 const auto toks = split_string(line, ' ');
                 value = stof(toks[1]);
+                return true;
             }
+
+            return false;
         }
 
-        static void try_parse_int(const string line, const string field_name,
+        static bool try_parse_int(const string line, const string field_name,
                 int & value) 
         {
             if (string_contains(line, field_name)) {
                 const auto toks = split_string(line, ' ');
                 value = stoi(toks[1]);
+                return true;
             }
+
+            return false;
         }
 
-        static void try_parse_vec3(const string line, const string field_name,
+        static bool try_parse_vec3(const string line, const string field_name,
                 vec3_t & vec) 
         {
             if (string_contains(line, field_name)) {
@@ -58,10 +64,13 @@ class ParserUtils {
                 vec.x = stof(toks[1]);
                 vec.y = stof(toks[2]);
                 vec.z = stof(toks[3]);
+                return true;
             }
+
+            return false;
         }
 
-        static void try_parse_vec4(const string line, const string field_name,
+        static bool try_parse_vec4(const string line, const string field_name,
                 vec4_t & vec) 
         {
             if (string_contains(line, field_name)) {
@@ -70,7 +79,10 @@ class ParserUtils {
                 vec.x = stof(toks[2]);
                 vec.y = stof(toks[3]);
                 vec.z = stof(toks[4]);
+                return true;
             }
+
+            return false;
         }
 
         static string strip_quotes(const string str)

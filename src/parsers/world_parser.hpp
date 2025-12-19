@@ -27,6 +27,8 @@ class WorldParser {
 
     public:
 
+        vector<Wall *> walls;
+
         void parse(const string world_file_name)
         {
             ifstream file(world_file_name);
@@ -53,7 +55,7 @@ class WorldParser {
                                 _wall->size);
 
                         if (ParserUtils::string_contains(line, "}")) {
-                            _walls.push_back(_wall);
+                            walls.push_back(_wall);
                             _wall = nullptr;
                         }
                     }
@@ -68,13 +70,9 @@ class WorldParser {
 
         void report()
         {
-            for (auto _wall : _walls) {
-                _wall->dump();
+            for (auto wall : walls) {
+                wall->dump();
             }
         }
-
-    private:
-
-        vector<Wall *> _walls;
 };
 

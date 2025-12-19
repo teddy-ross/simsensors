@@ -27,16 +27,16 @@ class SimRangefinder {
 
         int width;
         int height; 
-        double min_distance_m;
-        double max_distance_m;
+        int min_distance_mm;
+        int max_distance_mm;
         double field_of_view_radians;
 
     public:
 
-        void read(const vector<Wall *> walls, double * distances_m)
+        void read(const vector<Wall *> walls, int * distances_mm)
         {
             (void)walls;
-            (void)distances_m;
+            (void)distances_mm;
         }
 
         void dump()
@@ -46,8 +46,8 @@ class SimRangefinder {
             printf("  fov: %3.3f rad\n", field_of_view_radians);
             printf("  width: %d\n", width);
             printf("  height: %d\n", height);
-            printf("  min range: %3.3f m\n", min_distance_m);
-            printf("  max range: %3.3f m\n", max_distance_m);
+            printf("  min range: %d mm\n", min_distance_mm);
+            printf("  max range: %d mm\n", max_distance_mm);
 
             printf("\n");
         }

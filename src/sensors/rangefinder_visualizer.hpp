@@ -31,27 +31,25 @@ class RangefinderVisualizer {
             this->rangefinder = rangefinder;
         }
 
-        void show(const int16_t * distance_mm, const uint16_t scaleup) 
+        void show(const int * distances_mm, const int scaleup) 
         {
-            const uint16_t new_width = this->rangefinder->width * scaleup;
-            const uint16_t new_height = this->rangefinder->height * scaleup;
+            const int new_width = this->rangefinder->width * scaleup;
+            const int new_height = this->rangefinder->height * scaleup;
 
             cv::Mat img = cv::Mat::zeros(new_height, new_width, CV_8UC1);
-
-            const double min_distance_mm = this->rangefinder->min_distance_m * 1000;
-            const double max_distance_mm = this->rangefinder->max_distance_m * 1000;
 
             for (uint8_t x=0; x<this->rangefinder->width; ++x) {
 
                 for (uint8_t y=0; y<this->rangefinder->height; ++y) {
 
-                    const double d = distance_mm[y * this->rangefinder->width + x];
+                    const int d = distances_mm[y * this->rangefinder->width + x];
 
                     cv::rectangle(img,
                             cv::Point(x*scaleup, y*scaleup),
                             cv::Point((x+1)*scaleup, (y+1)*scaleup),
-                            d == -1 ? 255 : (uint8_t)((d-min_distance_mm) /
-                                (double)(max_distance_mm - min_distance_mm) * 255), 
+                            d == -1 ? 255 : (uint8_t)((d-this->rangefinder->min_distance_mm) /
+                                (double)(this->rangefinder->max_distance_mm -
+                                    this->rangefinder->min_distance_mm) * 255), 
                             -1);
                 }
             }
