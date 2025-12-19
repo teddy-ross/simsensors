@@ -33,9 +33,13 @@ class SimRangefinder {
 
     public:
 
-        void read(const vector<Wall *> walls, int * distances_mm)
+        void read(const vec3_t & robot_position, const vector<Wall *> walls,
+                int * distances_mm)
         {
-            (void)walls;
+            printf("x=%+3.3fm y=%+3.3fm z=%+3.3fm\n",
+                    robot_position.x, robot_position.y, robot_position.z);
+
+            walls[0]->dump();
 
             for (int k=0; k<this->width; ++k) {
                 distances_mm[k*this->height+k] = -1;
