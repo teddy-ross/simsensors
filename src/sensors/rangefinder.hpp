@@ -53,13 +53,12 @@ namespace simsens {
             void read(const pose_t & robot_pose, const vector<Wall *> walls,
                     int * distances_mm, vec2_t & endpoint)
             {
-                walls[0]->dump();
+                for (Wall * wall : walls) {
+                    wall->dump();
+                }
+                printf("-----------------------\n");
 
-
-                const double max_distance_m = this->max_distance_mm / 1000;
-
-                endpoint.x = robot_pose.x + cos(robot_pose.psi) * max_distance_m;
-                endpoint.y = robot_pose.y - sin(robot_pose.psi) * max_distance_m;
+                get_intersection(robot_pose, *walls[0], endpoint);
 
 
                 // XXX show a diagonal pattern for now
