@@ -51,7 +51,7 @@ namespace simsens {
                 walls[0]->dump();
                         */
 
-                const double max_distance_m = 0.1;//this->max_distance_mm / 1000;
+                const double max_distance_m = this->max_distance_mm / 1000;
 
                 end_x = robot_pose.x + cos(robot_pose.psi) * max_distance_m;
                 end_y = robot_pose.y - sin(robot_pose.psi) * max_distance_m;
