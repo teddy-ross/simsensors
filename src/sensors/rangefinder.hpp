@@ -46,18 +46,14 @@ namespace simsens {
 
                 const auto psi = wall.rotation.z;
                 const auto len = wall.size.y / 2;
-                const vec2_t wall_end_1 = {
-                    wall.translation.x + len * sin(psi),
-                    wall.translation.y + len * cos(psi)
-                };
-
-                const vec2_t wall_end_2 = {
-                    wall.translation.x - len * sin(psi),
-                    wall.translation.y - len * cos(psi)
-                };
-
-                point.x = wall_end_2.x;
-                point.y = wall_end_2.y;
+                const auto dx = len * sin(psi);
+                const auto dy = len * cos(psi);
+                const auto tx = wall.translation.x;
+                const auto ty = wall.translation.y;
+                const vec2_t wall_end_1 = {tx + dx, ty + dy};
+                const vec2_t wall_end_2 = {tx - dx, ty - dy};
+                point.x = wall_end_1.x;
+                point.y = wall_end_1.y;
 
                 (void)robot_pose;
                 //const double max_distance_m = this->max_distance_mm / 1000;
