@@ -43,6 +43,13 @@ namespace simsens {
                     vec2_t & point)
             {
 
+                // Get rangefinder beam endpoints
+                const double max_distance_m = this->max_distance_mm / 1000;
+                const auto x1 = robot_pose.x;
+                const auto y1 = robot_pose.y;
+                const auto x2 = robot_pose.x + cos(robot_pose.psi) * max_distance_m;
+                const auto y2 = robot_pose.y - sin(robot_pose.psi) * max_distance_m;
+
                 // Get wall endpoints
                 const auto psi = wall.rotation.z;
                 const auto len = wall.size.y / 2;
@@ -50,19 +57,15 @@ namespace simsens {
                 const auto dy = len * cos(psi);
                 const auto tx = wall.translation.x;
                 const auto ty = wall.translation.y;
-                const vec2_t wall_pt1 = {tx + dx, ty + dy};
-                const vec2_t wall_pt2 = {tx - dx, ty - dy};
+                const auto x3 = tx + dx;
+                const auto y3 = ty + dy;
+                const auto x4 = tx - dx;
+                const auto y4 = ty - dy;
 
-                // Get rangefinder beam endpoints
-                const double max_distance_m = this->max_distance_mm / 1000;
-                const vec2_t beam_pt1 = {robot_pose.x, robot_pose.y};
-                const vec2_t beam_pt2 = {
-                    robot_pose.x + cos(robot_pose.psi) * max_distance_m,
-                    robot_pose.y - sin(robot_pose.psi) * max_distance_m
-                };
-
-                point.x = beam_pt2.x;
-                point.y = beam_pt2.y;
+                // https://en.wikipedia.org/wiki/Line%E2%80%93line_intersection
+                const auto denom = (x1-x2) * (y3-y4) - (y1-y2) * (x3-x4);
+                point.x = ((x1*y2-y1*x2)*(x3-x4)-(x1-x2)*(x3*y4-y3*x4)) / denom;
+                point.y = ((x1*y2-y1*x2)*(y3-y4)-(y1-y2)*(x3*y4-y3*x4)) / denom;
             }
 
         public:
@@ -70,7 +73,7 @@ namespace simsens {
             void read(const pose_t & robot_pose, const vector<Wall *> walls,
                     int * distances_mm, vec2_t & endpoint)
             {
-                get_intersection(robot_pose, *walls[1], endpoint);
+                get_intersection(robot_pose, *walls[0], endpoint);
 
 
                 // XXX show a diagonal pattern for now
