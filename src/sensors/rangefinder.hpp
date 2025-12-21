@@ -36,8 +36,8 @@ namespace simsens {
                 const double max_distance_m = this->max_distance_mm / 1000;
                 const auto x1 = robot_pose.x;
                 const auto y1 = robot_pose.y;
-                const auto x2 = robot_pose.x + cos(robot_pose.psi) * max_distance_m;
-                const auto y2 = robot_pose.y - sin(robot_pose.psi) * max_distance_m;
+                const auto x2 = x1 + cos(robot_pose.psi) * max_distance_m;
+                const auto y2 = y1 - sin(robot_pose.psi) * max_distance_m;
 
                 endpoint.z = -1;
                 double dist_min = INFINITY;
@@ -65,7 +65,7 @@ namespace simsens {
                         if (ge(px, x3) && le(px, x4) && ge(py, y4) && le(py, y3)) {
                             const double dist = eucdist(x1, y1, px, py);
                             if (dist < dist_min) {
-                                //printf("%3.3f\n", dist);
+                                printf("%3.3f\n", dist);
                                 endpoint.x = px;
                                 endpoint.y = py;
                                 endpoint.z = robot_pose.z;
@@ -84,7 +84,6 @@ namespace simsens {
             void dump()
             {
                 printf("Rangefinder: \n");
-
                 printf("  fov: %3.3f rad\n", field_of_view_radians);
                 printf("  width: %d\n", width);
                 printf("  height: %d\n", height);
@@ -92,7 +91,6 @@ namespace simsens {
                 printf("  max range: %d mm\n", max_distance_mm);
                 printf("  translation: x=%+3.3fm y=%+3.3fm z=%+3.3fm\n",
                         translation.x, translation.y, translation.z);
-
                 printf("\n");
             }
 
