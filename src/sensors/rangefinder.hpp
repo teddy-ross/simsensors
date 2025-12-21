@@ -30,11 +30,11 @@ namespace simsens {
         public:
 
         void read(const pose_t & robot_pose, const vector<Wall *> walls,
-                int * distances_mm, vec3_t & endpoint)
+                int * distances_mm, vec3_t & dbg_endpoint)
         {
             (void)distances_mm;
 
-            // Get rangefinder beam endpoints
+            // Get rangefinder beam dbg_endpoints
             const double max_distance_m = this->max_distance_mm / 1000;
             const simsens::vec2_t beam_start = {robot_pose.x, robot_pose.y};
             const simsens::vec2_t beam_end = {
@@ -42,26 +42,26 @@ namespace simsens {
                 beam_start.y - sin(robot_pose.psi) * max_distance_m
             };
 
-            endpoint.z = -1;
+            dbg_endpoint.z = -1;
             double dist = INFINITY;
 
             for (auto wall : walls) {
 
-                vec2_t newendpoint = {};
+                vec2_t newdbg_endpoint = {};
                 const double newdist = distance_to_wall(
-                        beam_start, beam_end, *wall, newendpoint);
+                        beam_start, beam_end, *wall, newdbg_endpoint);
 
                 if (newdist < dist) {
-                    endpoint.x = newendpoint.x;
-                    endpoint.y = newendpoint.y;
-                    endpoint.z = robot_pose.z;
+                    dbg_endpoint.x = newdbg_endpoint.x;
+                    dbg_endpoint.y = newdbg_endpoint.y;
+                    dbg_endpoint.z = robot_pose.z;
                     dist = newdist;
                 }
             }
 
             if (dist > max_distance_m) {
                 dist = INFINITY;
-                endpoint.z = -1;
+                dbg_endpoint.z = -1;
             }
 
             printf("%3.3f\n", dist);
@@ -95,9 +95,9 @@ namespace simsens {
                 const vec2_t beam_start,
                 const vec2_t beam_end,
                 const Wall & wall,
-                vec2_t & endpoint)
+                vec2_t & dbg_endpoint)
         {
-            // Get wall endpoints
+            // Get wall dbg_endpoints
             const auto psi = wall.rotation.z;
             const auto len = wall.size.y / 2;
             const auto dx = len * sin(psi);
@@ -122,8 +122,8 @@ namespace simsens {
 
                 // Ensure intersection point within wall bounds
                 if (ge(px, x3) && le(px, x4) && ge(py, y4) && le(py, y3)) {
-                    endpoint.x = px;
-                    endpoint.y = py;
+                    dbg_endpoint.x = px;
+                    dbg_endpoint.y = py;
                     return eucdist(x1, y1, px, py);
                 }
             }
