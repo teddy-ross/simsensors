@@ -63,8 +63,9 @@ namespace simsens {
                     const auto py = ((x1*y2-y1*x2)*(y3-y4)-(y1-y2)*(x3*y4-y3*x4)) / denom;
 
                     if (ge(px, x3) && le(px, x4) && ge(py, y4) && le(py, y3)) {
-                        const double dist = l2dist(x1, y1, px, py);
+                        const double dist = eucdist(x1, y1, px, py);
                         if (dist < dist_min) {
+                            printf("%3.3f\n", dist);
                             endpoint.x = px;
                             endpoint.y = py;
                             endpoint.z = robot_pose.z;
@@ -96,7 +97,7 @@ namespace simsens {
 
         private:
 
-        static constexpr double MAX_WORLD_SIZE_M = 1000; // arbitrary
+        static constexpr double MAX_WORLD_SIZE_M = 500; // arbitrary
 
         int width;
         int height; 
@@ -119,11 +120,11 @@ namespace simsens {
             return fabs(x) < 0.001; // mm precision
         }
 
-        static double l2dist(double x1, double y1, double x2, double y2)
+        static double eucdist(double x1, double y1, double x2, double y2)
         {
             const auto xd = (x1 - x2);
             const auto yd = (y1 - y2);
-            return xd*xd + yd*yd;
+            return sqrt(xd*xd + yd*yd);
         }
     };
 
