@@ -29,25 +29,25 @@ namespace simsens {
 
         public:
 
-            void read(const pose_t & robot_pose, const vector<Wall *> walls,
-                    int * distances_mm, vector<vec2_t> & points)
-            {
-                const auto wall = *walls[0];
+        void read(const pose_t & robot_pose, const vector<Wall *> walls,
+                int * distances_mm, vector<vec2_t> & points)
+        {
+            // Get rangefinder beam endpoints
+            const double max_distance_m = this->max_distance_mm / 1000;
+            const auto x1 = robot_pose.x;
+            const auto y1 = robot_pose.y;
+            const auto x2 = robot_pose.x + cos(robot_pose.psi) * max_distance_m;
+            const auto y2 = robot_pose.y - sin(robot_pose.psi) * max_distance_m;
 
-                // Get rangefinder beam endpoints
-                const double max_distance_m = this->max_distance_mm / 1000;
-                const auto x1 = robot_pose.x;
-                const auto y1 = robot_pose.y;
-                const auto x2 = robot_pose.x + cos(robot_pose.psi) * max_distance_m;
-                const auto y2 = robot_pose.y - sin(robot_pose.psi) * max_distance_m;
+            for (auto wall : walls) {
 
                 // Get wall endpoints
-                const auto psi = wall.rotation.z;
-                const auto len = wall.size.y / 2;
+                const auto psi = wall->rotation.z;
+                const auto len = wall->size.y / 2;
                 const auto dx = len * sin(psi);
                 const auto dy = len * cos(psi);
-                const auto tx = wall.translation.x;
-                const auto ty = wall.translation.y;
+                const auto tx = wall->translation.x;
+                const auto ty = wall->translation.y;
                 const auto x3 = tx + dx;
                 const auto y3 = ty + dy;
                 const auto x4 = tx - dx;
@@ -62,50 +62,52 @@ namespace simsens {
                         points.push_back(vec2_t{px, py});
                     }
                 }
-                
+
                 // XXX show a diagonal pattern for now
                 for (int k=0; k<this->width; ++k) {
                     distances_mm[k*this->height+k] = -1;
                 }
             }
 
-            void dump()
-            {
-                printf("Rangefinder: \n");
+        }
 
-                printf("  fov: %3.3f rad\n", field_of_view_radians);
-                printf("  width: %d\n", width);
-                printf("  height: %d\n", height);
-                printf("  min range: %d mm\n", min_distance_mm);
-                printf("  max range: %d mm\n", max_distance_mm);
+        void dump()
+        {
+            printf("Rangefinder: \n");
 
-                printf("\n");
-            }
+            printf("  fov: %3.3f rad\n", field_of_view_radians);
+            printf("  width: %d\n", width);
+            printf("  height: %d\n", height);
+            printf("  min range: %d mm\n", min_distance_mm);
+            printf("  max range: %d mm\n", max_distance_mm);
+
+            printf("\n");
+        }
 
         private:
 
-            static constexpr double MAX_WORLD_SIZE_M = 1000; // arbitrary
+        static constexpr double MAX_WORLD_SIZE_M = 1000; // arbitrary
 
-            int width;
-            int height; 
-            int min_distance_mm;
-            int max_distance_mm;
-            double field_of_view_radians;
+        int width;
+        int height; 
+        int min_distance_mm;
+        int max_distance_mm;
+        double field_of_view_radians;
 
-            bool ge(const double a, const double b)
-            {
-                return eqz(a-b) || a > b;
-            }
+        bool ge(const double a, const double b)
+        {
+            return eqz(a-b) || a > b;
+        }
 
-            bool le(const double a, const double b)
-            {
-                return eqz(a-b) || b > a;
-            }
+        bool le(const double a, const double b)
+        {
+            return eqz(a-b) || b > a;
+        }
 
-            bool eqz(const double x)
-            {
-                return fabs(x) < 0.001; // mm precision
-            }
+        bool eqz(const double x)
+        {
+            return fabs(x) < 0.001; // mm precision
+        }
 
     };
 
