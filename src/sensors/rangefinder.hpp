@@ -30,7 +30,7 @@ namespace simsens {
         public:
 
         void read(const pose_t & robot_pose, const vector<Wall *> walls,
-                int * distances_mm, vector<vec2_t> & points)
+                int * distances_mm, vec3_t & endpoint)
         {
             // Get rangefinder beam endpoints
             const double max_distance_m = this->max_distance_mm / 1000;
@@ -38,6 +38,8 @@ namespace simsens {
             const auto y1 = robot_pose.y;
             const auto x2 = robot_pose.x + cos(robot_pose.psi) * max_distance_m;
             const auto y2 = robot_pose.y - sin(robot_pose.psi) * max_distance_m;
+
+            endpoint.z = -1;
 
             for (auto wall : walls) {
 
@@ -59,7 +61,9 @@ namespace simsens {
                     const auto px = ((x1*y2-y1*x2)*(x3-x4)-(x1-x2)*(x3*y4-y3*x4)) / denom;
                     const auto py = ((x1*y2-y1*x2)*(y3-y4)-(y1-y2)*(x3*y4-y3*x4)) / denom;
                     if (ge(px, x3) && le(px, x4) && ge(py, y4) && le(py, y3)) {
-                        points.push_back(vec2_t{px, py});
+                        endpoint.x = px;
+                        endpoint.y = py;
+                        endpoint.z = robot_pose.z;
                     }
                 }
 
