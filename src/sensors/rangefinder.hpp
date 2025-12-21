@@ -36,10 +36,11 @@ namespace simsens {
 
             // Get rangefinder beam endpoints
             const double max_distance_m = this->max_distance_mm / 1000;
-            const auto x1 = robot_pose.x;
-            const auto y1 = robot_pose.y;
-            const auto x2 = x1 + cos(robot_pose.psi) * max_distance_m;
-            const auto y2 = y1 - sin(robot_pose.psi) * max_distance_m;
+            const simsens::vec2_t beam_start = {robot_pose.x, robot_pose.y};
+            const simsens::vec2_t beam_end = {
+                beam_start.x + cos(robot_pose.psi) * max_distance_m,
+                beam_start.y - sin(robot_pose.psi) * max_distance_m
+            };
 
             endpoint.z = -1;
             double dist = INFINITY;
@@ -47,8 +48,8 @@ namespace simsens {
             for (auto wall : walls) {
 
                 vec2_t newendpoint = {};
-                const double newdist = distance_to_wall(x1, y1, x2, y2, *wall,
-                        newendpoint);
+                const double newdist = distance_to_wall(
+                        beam_start, beam_end, *wall, newendpoint);
 
                 if (newdist < dist) {
                     endpoint.x = newendpoint.x;
@@ -60,6 +61,7 @@ namespace simsens {
 
             if (dist > max_distance_m) {
                 dist = INFINITY;
+                endpoint.z = -1;
             }
 
             printf("%3.3f\n", dist);
@@ -90,8 +92,8 @@ namespace simsens {
         vec3_t translation;
 
         double distance_to_wall(
-                const double x1, const double y1,
-                const double x2, const double y2,
+                const vec2_t beam_start,
+                const vec2_t beam_end,
                 const Wall & wall,
                 vec2_t & endpoint)
         {
@@ -106,6 +108,11 @@ namespace simsens {
             const auto y3 = ty + dy;
             const auto x4 = tx - dx;
             const auto y4 = ty - dy;
+
+            const auto x1 = beam_start.x;
+            const auto y1 = beam_start.y;
+            const auto x2 = beam_end.x;
+            const auto y2 = beam_end.y;
 
             // https://en.wikipedia.org/wiki/Line%E2%80%93line_intersection
             const auto denom = (x1-x2) * (y3-y4) - (y1-y2) * (x3-x4);
