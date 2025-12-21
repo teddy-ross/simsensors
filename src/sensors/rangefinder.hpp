@@ -91,7 +91,7 @@ namespace simsens {
         double field_of_view_radians;
         vec3_t translation;
 
-        double distance_to_wall(
+        static double distance_to_wall(
                 const vec2_t beam_start,
                 const vec2_t beam_end,
                 const Wall & wall,
@@ -130,7 +130,6 @@ namespace simsens {
 
             return INFINITY;
         }
-
 
         static bool ge(const double a, const double b)
         {
