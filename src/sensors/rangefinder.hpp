@@ -40,7 +40,7 @@ namespace simsens {
             double field_of_view_radians;
 
             void get_intersection(const pose_t & robot_pose, Wall & wall,
-                    vec2_t & point, bool & legit)
+                    vector<vec2_t> & points)
             {
 
                 // Get rangefinder beam endpoints
@@ -64,12 +64,15 @@ namespace simsens {
 
                 // https://en.wikipedia.org/wiki/Line%E2%80%93line_intersection
                 const auto denom = (x1-x2) * (y3-y4) - (y1-y2) * (x3-x4);
-                legit = !ltz(denom);
-                if (legit) {
-                    point.x = ((x1*y2-y1*x2)*(x3-x4)-(x1-x2)*(x3*y4-y3*x4)) / denom;
-                    point.y = ((x1*y2-y1*x2)*(y3-y4)-(y1-y2)*(x3*y4-y3*x4)) / denom;
-                    legit = ge(point.x, x3) && le(point.x, x4) &&
-                        ge(point.y, y4) && le(point.y, y3);
+                if (!ltz(denom)) {
+                    vec2_t point = {
+                        ((x1*y2-y1*x2)*(x3-x4)-(x1-x2)*(x3*y4-y3*x4)) / denom,
+                        ((x1*y2-y1*x2)*(y3-y4)-(y1-y2)*(x3*y4-y3*x4)) / denom
+                    };
+                    if (ge(point.x, x3) && le(point.x, x4) &&
+                            ge(point.y, y4) && le(point.y, y3)) {
+                        points.push_back(point);
+                    }
                 }
             }
 
@@ -91,11 +94,10 @@ namespace simsens {
         public:
 
             void read(const pose_t & robot_pose, const vector<Wall *> walls,
-                    int * distances_mm, vec2_t & endpoint, bool & legit)
+                    int * distances_mm, vector<vec2_t> & points)
             {
-                get_intersection(robot_pose, *walls[1], endpoint, legit);
-
-
+                get_intersection(robot_pose, *walls[0], points);
+                
                 // XXX show a diagonal pattern for now
                 for (int k=0; k<this->width; ++k) {
                     distances_mm[k*this->height+k] = -1;
