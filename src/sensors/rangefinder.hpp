@@ -27,21 +27,12 @@ namespace simsens {
         friend class RangefinderVisualizer;
         friend class RobotParser;
 
-        private:
+        public:
 
-            static constexpr double MAX_WORLD_SIZE_M = 1000; // arbitrary
-
-            static constexpr float RAD2DEG = 180.0f / M_PI;
-
-            int width;
-            int height; 
-            int min_distance_mm;
-            int max_distance_mm;
-            double field_of_view_radians;
-
-            void get_intersection(const pose_t & robot_pose, Wall & wall,
-                    vector<vec2_t> & points)
+            void read(const pose_t & robot_pose, const vector<Wall *> walls,
+                    int * distances_mm, vector<vec2_t> & points)
             {
+                const auto wall = *walls[0];
 
                 // Get rangefinder beam endpoints
                 const double max_distance_m = this->max_distance_mm / 1000;
@@ -71,29 +62,6 @@ namespace simsens {
                         points.push_back(vec2_t{px, py});
                     }
                 }
-            }
-
-            bool ge(const double a, const double b)
-            {
-                return eqz(a-b) || a > b;
-            }
-
-            bool le(const double a, const double b)
-            {
-                return eqz(a-b) || b > a;
-            }
-
-            bool eqz(const double x)
-            {
-                return fabs(x) < 0.001; // mm precision
-            }
-
-        public:
-
-            void read(const pose_t & robot_pose, const vector<Wall *> walls,
-                    int * distances_mm, vector<vec2_t> & points)
-            {
-                get_intersection(robot_pose, *walls[0], points);
                 
                 // XXX show a diagonal pattern for now
                 for (int k=0; k<this->width; ++k) {
@@ -113,6 +81,32 @@ namespace simsens {
 
                 printf("\n");
             }
+
+        private:
+
+            static constexpr double MAX_WORLD_SIZE_M = 1000; // arbitrary
+
+            int width;
+            int height; 
+            int min_distance_mm;
+            int max_distance_mm;
+            double field_of_view_radians;
+
+            bool ge(const double a, const double b)
+            {
+                return eqz(a-b) || a > b;
+            }
+
+            bool le(const double a, const double b)
+            {
+                return eqz(a-b) || b > a;
+            }
+
+            bool eqz(const double x)
+            {
+                return fabs(x) < 0.001; // mm precision
+            }
+
     };
 
 }
