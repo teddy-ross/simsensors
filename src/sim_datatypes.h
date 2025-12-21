@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include <math.h>
+
 namespace simsens {
 
     typedef struct {
@@ -46,5 +48,4 @@ namespace simsens {
         double y;
         double z;
     } vec4_t;
-
 };
