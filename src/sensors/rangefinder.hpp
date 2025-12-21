@@ -64,29 +64,26 @@ namespace simsens {
 
                 // https://en.wikipedia.org/wiki/Line%E2%80%93line_intersection
                 const auto denom = (x1-x2) * (y3-y4) - (y1-y2) * (x3-x4);
-                if (!ltz(denom)) {
-                    vec2_t point = {
-                        ((x1*y2-y1*x2)*(x3-x4)-(x1-x2)*(x3*y4-y3*x4)) / denom,
-                        ((x1*y2-y1*x2)*(y3-y4)-(y1-y2)*(x3*y4-y3*x4)) / denom
-                    };
-                    if (ge(point.x, x3) && le(point.x, x4) &&
-                            ge(point.y, y4) && le(point.y, y3)) {
-                        points.push_back(point);
+                if (!eqz(denom)) {
+                    const auto px = ((x1*y2-y1*x2)*(x3-x4)-(x1-x2)*(x3*y4-y3*x4)) / denom;
+                    const auto py = ((x1*y2-y1*x2)*(y3-y4)-(y1-y2)*(x3*y4-y3*x4)) / denom;
+                    if (ge(px, x3) && le(px, x4) && ge(py, y4) && le(py, y3)) {
+                        points.push_back(vec2_t{px, py});
                     }
                 }
             }
 
             bool ge(const double a, const double b)
             {
-                return ltz(a-b) || a > b;
+                return eqz(a-b) || a > b;
             }
 
             bool le(const double a, const double b)
             {
-                return ltz(a-b) || b > a;
+                return eqz(a-b) || b > a;
             }
 
-            bool ltz(const double x)
+            bool eqz(const double x)
             {
                 return fabs(x) < 0.001; // mm precision
             }
