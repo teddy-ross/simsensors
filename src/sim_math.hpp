@@ -23,7 +23,7 @@
 namespace simsens {
 
     // https://www.euclideanspace.com/maths/geometry/rotations/conversions/angleToEuler/index.htm
-    void rotation2euler(const newrotation_t & rotation, vec3_t & angles)
+    void rotation2euler(const rotation_t & rotation, vec3_t & angles)
     {
         static constexpr double TOL = 2e-3;
 

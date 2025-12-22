@@ -34,10 +34,10 @@ namespace simsens {
 
             Wall()
             {
-                rotation.w = 0;
                 rotation.x = 0;
-                rotation.y = 1;
-                rotation.z = 0;
+                rotation.y = 0;
+                rotation.z = 1;
+                rotation.alpha = 0;
             }
 
             void dump()
@@ -47,8 +47,8 @@ namespace simsens {
                 printf("  translation: x=%+3.3f y=%+3.3f z=%+3.3f\n",
                         translation.x, translation.y, translation.z);
 
-                printf("  rotation: w=%+3.3f x=%+3.3f y=%+3.3f z=%+3.3f\n",
-                        rotation.w, rotation.x, rotation.y, rotation.z);
+                printf("  rotation: x=%+3.3f y=%+3.3f z=%+3.3f z=%+3.3f\n",
+                        rotation.x, rotation.y, rotation.z, rotation.alpha);
 
                 printf("  size: x=%3.3f y=%3.3f z=%3.3f\n",
                         size.x, size.y, size.z);

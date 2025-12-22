@@ -103,7 +103,7 @@ namespace simsens {
                 vec2_t & dbg_endpoint)
         {
             // Get wall dbg_endpoints
-            const auto psi = wall.rotation.z;
+            const auto psi = wall.rotation.alpha; // XXX should use rotvec2euler() conversion
             const auto len = wall.size.y / 2;
             const auto dx = len * sin(psi);
             const auto dy = len * cos(psi);

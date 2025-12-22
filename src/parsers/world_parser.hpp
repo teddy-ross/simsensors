@@ -51,7 +51,7 @@ namespace simsens {
 
                             ParserUtils::try_parse_vec3(line, "translation",
                                     _wall->translation);
-                            ParserUtils::try_parse_vec4(line, "rotation",
+                            ParserUtils::try_parse_rotation(line, "rotation",
                                     _wall->rotation);
                             ParserUtils::try_parse_vec3(line, "size",
                                     _wall->size);

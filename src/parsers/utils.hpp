@@ -72,15 +72,15 @@ namespace simsens {
                 return false;
             }
 
-            static bool try_parse_vec4(const string line, const string field_name,
-                    rotation_t & vec) 
+            static bool try_parse_rotation(const string line, const string field_name,
+                    rotation_t & rot) 
             {
                 if (string_contains(line, field_name)) {
                     const auto toks = split_string(line, ' ');
-                    vec.w = stof(toks[1]);
-                    vec.x = stof(toks[2]);
-                    vec.y = stof(toks[3]);
-                    vec.z = stof(toks[4]);
+                    rot.x = stof(toks[1]);
+                    rot.y = stof(toks[2]);
+                    rot.z = stof(toks[3]);
+                    rot.alpha = stof(toks[4]);
                     return true;
                 }
 

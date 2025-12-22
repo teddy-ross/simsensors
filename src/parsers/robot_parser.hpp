@@ -75,7 +75,7 @@ namespace simsens {
                                     rangefinder->translation);
 
                             rotation_t rotation = {};
-                            if (ParserUtils::try_parse_vec4(line, "rotation",
+                            if (ParserUtils::try_parse_rotation(line, "rotation",
                                     rotation)) {
                                 //rotvec2euler(rotation, rangefinder->angles);
                             }
