@@ -77,7 +77,7 @@ namespace simsens {
                             vec4_t rotation = {};
                             if (ParserUtils::try_parse_vec4(line, "rotation",
                                     rotation)) {
-                                rotvec2euler(rotation, rangefinder->angles);
+                                //rotvec2euler(rotation, rangefinder->angles);
                             }
 
                             if (ParserUtils::string_contains(line, "}") ||
