@@ -39,10 +39,10 @@ namespace simsens {
             rotation_to_euler(rotation, rangefinder_angles);
             const auto psi = robot_pose.psi + rangefinder_angles.z;
 
-            // Calculate beam startpoint
+            // Beam starts at robot coordinates
             const simsens::vec2_t beam_start = {
-                robot_pose.x + this->translation.x,
-                robot_pose.y + this->translation.y
+                robot_pose.x, 
+                robot_pose.y
             };
 
             // Calculate beam endpoint
@@ -73,7 +73,9 @@ namespace simsens {
                 dbg_intersection.z = -1;
             }
 
-            printf("dist=%3.3fm -------------------\n", dist);
+            dist -= sqrtl2(this->translation.x, this->translation.y);
+
+            printf("dist=%3.3f\n", dist);
         }
 
         void dump()
@@ -146,8 +148,8 @@ namespace simsens {
                     dbg_intersection.x = px;
                     dbg_intersection.y = py;
 
-                    // Account for wall thickness
-                    return eucdist(x1, y1, px, py) - wall.size.x / 2; 
+                    // Account for wall thickness, sensor offset
+                    return eucdist(x1, y1, px, py) - wall.size.x / 2;
                 }
             }
 
@@ -174,7 +176,12 @@ namespace simsens {
         {
             const auto xd = (x1 - x2);
             const auto yd = (y1 - y2);
-            return sqrt(xd*xd + yd*yd);
+            return sqrtl2(xd, yd);
+        }
+
+        static double sqrtl2(const double a, const double b)
+        {
+            return sqrt(a*a + b*b);
         }
     };
 
