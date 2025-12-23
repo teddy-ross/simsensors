@@ -56,15 +56,18 @@ namespace simsens {
 
             for (auto wall : walls) {
 
-                vec2_t newdbg_intersection = {};
-                const double newdist = distance_to_wall(
-                        beam_start, beam_end, *wall, newdbg_intersection);
+                if (robot_pose.z < wall->size.z) { // XXX should use beam Z instead of robot Z
 
-                if (newdist < dist) {
-                    dbg_intersection.x = newdbg_intersection.x;
-                    dbg_intersection.y = newdbg_intersection.y;
-                    dbg_intersection.z = robot_pose.z;
-                    dist = newdist;
+                    vec2_t newdbg_intersection = {};
+                    const double newdist = distance_to_wall(
+                            beam_start, beam_end, *wall, newdbg_intersection);
+
+                    if (newdist < dist) {
+                        dbg_intersection.x = newdbg_intersection.x;
+                        dbg_intersection.y = newdbg_intersection.y;
+                        dbg_intersection.z = robot_pose.z;
+                        dist = newdist;
+                    }
                 }
             }
 
