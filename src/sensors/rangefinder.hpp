@@ -113,34 +113,27 @@ namespace simsens {
                 vec2_t & dbg_intersection)
         {
             // Get wall endpoints
-            vec3_t wall_angles = {};
-            rotation_to_euler(wall.rotation, wall_angles);
-            const auto psi = wall_angles.z;
+            const auto psi = wall.rotation.alpha; // rotation always 0 0 1 alpha
             const auto len = wall.size.y / 2;
             const auto dx = len * sin(psi);
             const auto dy = len * cos(psi);
             const auto tx = wall.translation.x;
             const auto ty = wall.translation.y;
-            const auto x3 = tx + dx;
-            const auto y3 = ty + dy;
-            const auto x4 = tx - dx;
-            const auto y4 = ty - dy;
-
-            const auto x1 = beam_start.x;
-            const auto y1 = beam_start.y;
-            const auto x2 = beam_end.x;
-            const auto y2 = beam_end.y;
 
             double px=0, py=0;
 
-            if (line_segments_intersect(x1, y1, x2, y2, x3, y3, x4, y4,
+            if (line_segments_intersect(
+                        beam_start.x, beam_start.y,
+                        beam_end.x, beam_end.y,
+                        tx + dx, ty + dy,
+                        tx - dx, ty - dy,
                         px, py))
             {
-                    dbg_intersection.x = px;
-                    dbg_intersection.y = py;
+                dbg_intersection.x = px;
+                dbg_intersection.y = py;
 
-                    // Account for wall thickness, sensor offset
-                    return eucdist(x1, y1, px, py) - wall.size.x / 2;
+                return eucdist(beam_start.x, beam_start.y, px, py) -
+                    wall.size.x / 2; // account for wall thickness
             }
 
             // No intersection found
