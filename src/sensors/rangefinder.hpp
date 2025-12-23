@@ -115,10 +115,10 @@ namespace simsens {
             // Get wall endpoints
             const auto psi = wall.rotation.alpha; // rot.  always 0 0 1 alpha
             const auto len = wall.size.y / 2;
-            const auto dx = len * sin(psi);
-            const auto dy = len * cos(psi);
-            const auto tx = wall.translation.x;
-            const auto ty = wall.translation.y;
+            const auto wall_dx = len * sin(psi);
+            const auto wall_dy = len * cos(psi);
+            const auto wall_tx = wall.translation.x;
+            const auto wall_ty = wall.translation.y;
 
             // If beam ((x1,y1),(x2,y2)) intersects with with wall
             // ((x3,y3),(x4,y4)) 
@@ -126,8 +126,8 @@ namespace simsens {
             if (line_segments_intersect(
                         beam_start_xy.x, beam_start_xy.y,
                         beam_end_xy.x, beam_end_xy.y,
-                        tx + dx, ty + dy,
-                        tx - dx, ty - dy,
+                        wall_tx + wall_dx, wall_ty + wall_dy,
+                        wall_tx - wall_dx, wall_ty - wall_dy,
                         px, py)) {
 
                 // Use intersection (px,py) to calculate XY distance to wall
@@ -139,8 +139,10 @@ namespace simsens {
                 // offset of intersection on wall w.r.t. robot Z
                 const auto dz = tan(elevation_angle) * xydist;
 
-                // Calculate XYZ distance by including Z offset
-                const auto xyzdist = sqrt(dx*dx + dy*dy + dz*dz);
+                // Calculate XYZ distance by including Z offset and wall
+                // thickness
+                const auto xyzdist = sqrt(dx*dx + dy*dy + dz*dz) -
+                    wall.size.x/2;
 
                 // If XYZ distance is shorter than current, update current
                 if (xyzdist < mindist) {
