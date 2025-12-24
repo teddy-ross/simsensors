@@ -72,10 +72,8 @@ namespace simsens {
                 distances_mm[0] = dist * 1000; // m => mm
 
                 // Support debugging
-                if (logfp) {
-                    if (robot_pose.z > 0.18) {
-                        fprintf(logfp, "%d\n", distances_mm[0]);
-                    }
+                if (logfp && robot_pose.z > 0.18) {
+                    fprintf(logfp, "%d\n", distances_mm[0]);
                 }
                 if (dbg_intersection) {
                     memcpy(dbg_intersection, &intersection, sizeof(vec3_t));
@@ -153,11 +151,15 @@ namespace simsens {
                     const auto xyzdist = sqrt(dx*dx + dy*dy + dz*dz)
                         - wall.size.x / 2;
 
-                    // If XYZ distance is shorter than current, update current
-                    if (xyzdist < mindist) {
+                    // Calculate Z in world coordinates
+                    const auto pz = robot_z + dz;
+
+                    // If Z is below wall and XYZ distance is shorter than
+                    // current, update current
+                    if (pz < wall.size.z && xyzdist < mindist) {
                         intersection.x = px;
                         intersection.y = py;
-                        intersection.z = robot_z + dz;
+                        intersection.z = pz;
                         mindist = xyzdist;
                     }
                 }
