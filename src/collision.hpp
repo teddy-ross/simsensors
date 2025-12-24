@@ -34,8 +34,20 @@ namespace simsens {
             static bool detect(
                     const vec3_t & robot_location, const vector<Wall *> walls)
             {
-                (void)robot_location;
-                (void)walls;
+                for (auto wall : walls) {
+
+                    if (
+                            intersect_with_wall_at_azimuth(
+                                robot_location, *wall, 0) || 
+                            intersect_with_wall_at_azimuth(
+                                robot_location, *wall, M_PI/2) || 
+                            intersect_with_wall_at_azimuth(
+                                robot_location, *wall, M_PI) || 
+                            intersect_with_wall_at_azimuth(
+                                robot_location, *wall, 3*M_PI/2)) {
+                        return true;
+                    }
+                }
 
                 return false;
             }
@@ -45,6 +57,19 @@ namespace simsens {
             // Arbitrary limits
             static constexpr double COLLISION_TOLERANCE_M = 0.05;
 
+            static bool intersect_with_wall_at_azimuth(
+                    const vec3_t & robot_location,
+                    const Wall & wall,
+                    const double azimuth)
+            {
+                return intersect_with_wall(
+                        robot_location,
+                        azimuth,
+                        0, // elevation
+                        wall)
+
+                    < COLLISION_TOLERANCE_M;
+            }
     };
 }
 
