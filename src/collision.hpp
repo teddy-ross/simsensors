@@ -1,5 +1,5 @@
 /* 
-   Rangefinder simulator
+   Collision detection
 
    Copyright (C) 2025 Simon D. Levy
 
@@ -22,28 +22,22 @@
 
 namespace simsens {
 
-    class SimRangefinder {
+    class CollisionDetector {
 
         public:
 
-            void read(const pose_t & robot_pose, const vector<Wall *> walls,
-                    int * distances_mm,
-                    vec3_t * dbg_intersection=nullptr, FILE * logfp=nullptr)
+            bool detect(const pose_t & robot_pose, const vector<Wall *> walls)
             {
-                // Get rangefinder rotation w.r.t. vehicle
-                vec3_t rangefinder_angles= {};
-                rotation_to_euler(rotation, rangefinder_angles);
+                // Beam starts at robot coordinates
+                const simsens::vec2_t beam_start = {robot_pose.x, robot_pose.y};
 
                 // Use vehicle angles and rangefinder angle to get rangefinder
                 // azimuth and elevation angles
-                const auto azimuth_angle = robot_pose.psi + rangefinder_angles.z;
-                const auto elevation_angle = robot_pose.theta + rangefinder_angles.y;
-
-                // Beam starts at robot coordinates
-                const vec2_t beam_start = {robot_pose.x, robot_pose.y};
+                const auto azimuth_angle = robot_pose.psi;
+                const auto elevation_angle = robot_pose.theta;
 
                 // Calculate beam endpoint
-                const vec2_t beam_end = {
+                const simsens::vec2_t beam_end = {
                     beam_start.x + cos(azimuth_angle) * max_distance_m,
                     beam_start.y - sin(azimuth_angle) * max_distance_m,
                 };
@@ -55,50 +49,12 @@ namespace simsens {
                     intersect_with_wall(beam_start, beam_end, robot_pose.z,
                             elevation_angle, *wall, dist, intersection);
                 }
-
-                // Cut off distance at rangefinder's maximum
-                if (dist > max_distance_m) {
-                    dist = INFINITY;
-                    intersection.z = -1;
-                }
-
-                // Subtract sensor offset from distance
-                dist -= sqrt(
-                        sqr(this->translation.x) +
-                        sqr(this->translation.y) +
-                        sqr(this->translation.z));
-
-                // Use just one distance for now
-                distances_mm[0] = dist == INFINITY ? -1 : dist * 1000;
-
-                // Support debugging
-                if (logfp && robot_pose.z > 0.18) {
-                    fprintf(logfp, "%d\n", distances_mm[0]);
-                }
-                if (dbg_intersection) {
-                    dbg_intersection->x = intersection.x;
-                    dbg_intersection->y = intersection.y;
-                    dbg_intersection->z = intersection.z;
-                }
-
             }
 
-            void dump()
-            {
-                printf("Rangefinder: \n");
-                printf("  fov: %3.3fr\n", field_of_view_radians);
-                printf("  width: %d\n", width);
-                printf("  height: %d\n", height);
-                printf("  min range: %3.3fm\n", min_distance_m);
-                printf("  max range: %3.3fm\n", max_distance_m);
-                printf("  translation: x=%+3.3fm y=%+3.3fm z=%+3.3fm\n",
-                        translation.x, translation.y, translation.z);
-                printf("  rotation: x=%+3.3f y=%+3.3f z=%+3.3f alpha=%+3.3fr\n",
-                        rotation.x, rotation.y, rotation.z, rotation.alpha);
-                printf("\n");
-            }
 
         private:
+
+            static constexpr double MAX_WORLD_SIZE_M = 500; // arbitrary
 
             FILE * _logfp;
 
