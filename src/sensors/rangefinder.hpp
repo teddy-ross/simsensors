@@ -69,7 +69,7 @@ namespace simsens {
                         sqr(this->translation.z));
 
                 // Use just one distance for now
-                distances_mm[0] = dist * 1000; // m => mm
+                distances_mm[0] = dist == INFINITY ? -1 : dist * 1000;
 
                 // Support debugging
                 if (logfp && robot_pose.z > 0.18) {
