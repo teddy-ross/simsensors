@@ -21,6 +21,7 @@
 #include <math.h>
 
 #include <sstypes.h>
+#include <obstacles/wall.hpp>
 
 namespace simsens {
 
@@ -95,4 +96,75 @@ namespace simsens {
         return false;
     }
 
+    static double sqr(const double x)
+    {
+        return x * x;
+    }
+
+    static double intersect_with_wall(
+            const pose_t robot_pose,
+            const double azimuth_angle,
+            const double elevation_angle,
+            const Wall & wall,
+            vec3_t * intersection=nullptr)
+    {
+        static constexpr double MAX_WORLD_DIM_M = 20; // arbitrary
+
+        // Calculate beam endpoints
+        const vec2_t beam_start_xy = {robot_pose.x, robot_pose.y};
+        const vec2_t beam_end_xy = {
+            robot_pose.x + cos(azimuth_angle) * MAX_WORLD_DIM_M,
+            robot_pose.y - sin(azimuth_angle) * MAX_WORLD_DIM_M,
+        };
+
+
+        // Get wall endpoints
+        const auto psi = wall.rotation.alpha; // rot.  always 0 0 1 alpha
+        const auto len = wall.size.y / 2;
+        const auto wall_dx = len * sin(psi);
+        const auto wall_dy = len * cos(psi);
+        const auto wall_tx = wall.translation.x;
+        const auto wall_ty = wall.translation.y;
+
+        // If beam ((x1,y1),(x2,y2)) intersects with with wall
+        // ((x3,y3),(x4,y4)) 
+        double px=0, py=0;
+        if (line_segments_intersect(
+                    beam_start_xy.x, beam_start_xy.y,
+                    beam_end_xy.x, beam_end_xy.y,
+                    wall_tx + wall_dx, wall_ty + wall_dy,
+                    wall_tx - wall_dx, wall_ty - wall_dy,
+                    px, py)) {
+
+            // Use intersection (px,py) to calculate XY distance to wall
+            const auto dx = beam_start_xy.x - px;
+            const auto dy = beam_start_xy.y - py;
+            const auto xydist = sqrt(dx*dx + dy*dy);
+
+            // Use XY distance, robot Z, and elevation angle to calculate Z
+            // offset of intersection on wall w.r.t. robot Z
+            const auto dz = -tan(elevation_angle) * xydist;
+
+            // Calculate XYZ distance by including Z offset and wall
+            // thickness
+            const auto xyzdist = sqrt(dx*dx + dy*dy + dz*dz)
+                - wall.size.x / 2;
+
+            // Calculate Z in world coordinates
+            const auto pz = robot_pose.z + dz;
+
+            // If Z is below wall and XYZ distance is shorter than
+            // current, update current
+            if (pz < wall.size.z) {
+                if (intersection) {
+                    intersection->x = px;
+                    intersection->y = py;
+                    intersection->z = pz;
+                }
+                return xyzdist;
+            }
+        }
+
+        return INFINITY;
+    }
 };

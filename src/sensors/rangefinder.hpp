@@ -39,21 +39,13 @@ namespace simsens {
                 const auto azimuth_angle = robot_pose.psi + rangefinder_angles.z;
                 const auto elevation_angle = robot_pose.theta + rangefinder_angles.y;
 
-                // Beam starts at robot coordinates
-                const vec2_t beam_start = {robot_pose.x, robot_pose.y};
-
-                // Calculate beam endpoint
-                const vec2_t beam_end = {
-                    beam_start.x + cos(azimuth_angle) * max_distance_m,
-                    beam_start.y - sin(azimuth_angle) * max_distance_m,
-                };
-
                 // Run a classic calculate-min loop to get distance to closest wall
                 double dist = INFINITY;
                 vec3_t intersection = {};
                 for (auto wall : walls) {
-                    intersect_with_wall(beam_start, beam_end, robot_pose.z,
-                            elevation_angle, *wall, dist, intersection);
+                    dist = min(dist, intersect_with_wall(
+                            robot_pose, azimuth_angle, elevation_angle, *wall,
+                            &intersection));
                 }
 
                 // Cut off distance at rangefinder's maximum
@@ -80,7 +72,6 @@ namespace simsens {
                     dbg_intersection->y = intersection.y;
                     dbg_intersection->z = intersection.z;
                 }
-
             }
 
             void dump()
@@ -108,68 +99,7 @@ namespace simsens {
             vec3_t translation;
             rotation_t rotation;
 
-            static void intersect_with_wall(
-                    const vec2_t beam_start_xy,
-                    const vec2_t beam_end_xy,
-                    const double robot_z,
-                    const double elevation_angle,
-                    const Wall & wall,
-                    double & mindist,
-                    vec3_t & intersection)
-            {
-                // Get wall endpoints
-                const auto psi = wall.rotation.alpha; // rot.  always 0 0 1 alpha
-                const auto len = wall.size.y / 2;
-                const auto wall_dx = len * sin(psi);
-                const auto wall_dy = len * cos(psi);
-                const auto wall_tx = wall.translation.x;
-                const auto wall_ty = wall.translation.y;
-
-                // If beam ((x1,y1),(x2,y2)) intersects with with wall
-                // ((x3,y3),(x4,y4)) 
-                double px=0, py=0;
-                if (line_segments_intersect(
-                            beam_start_xy.x, beam_start_xy.y,
-                            beam_end_xy.x, beam_end_xy.y,
-                            wall_tx + wall_dx, wall_ty + wall_dy,
-                            wall_tx - wall_dx, wall_ty - wall_dy,
-                            px, py)) {
-
-                    // Use intersection (px,py) to calculate XY distance to wall
-                    const auto dx = beam_start_xy.x - px;
-                    const auto dy = beam_start_xy.y - py;
-                    const auto xydist = sqrt(dx*dx + dy*dy);
-
-                    // Use XY distance, robot Z, and elevation angle to calculate Z
-                    // offset of intersection on wall w.r.t. robot Z
-                    const auto dz = -tan(elevation_angle) * xydist;
-
-                    // Calculate XYZ distance by including Z offset and wall
-                    // thickness
-                    const auto xyzdist = sqrt(dx*dx + dy*dy + dz*dz)
-                        - wall.size.x / 2;
-
-                    // Calculate Z in world coordinates
-                    const auto pz = robot_z + dz;
-
-                    // If Z is below wall and XYZ distance is shorter than
-                    // current, update current
-                    if (pz < wall.size.z && xyzdist < mindist) {
-                        intersection.x = px;
-                        intersection.y = py;
-                        intersection.z = pz;
-                        mindist = xyzdist;
-                    }
-                }
-            }
-
-            static double sqr(const double x)
-            {
-                return x * x;
-            }
-
             friend class RangefinderVisualizer;
             friend class RobotParser;
-
     };
 }
