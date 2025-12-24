@@ -28,7 +28,7 @@ namespace simsens {
 
             void read(const pose_t & robot_pose, const vector<Wall *> walls,
                     int * distances_mm,
-                    vec3_t * dbg_intersection=nullptr, FILE * logfp=nullptr)
+                    vec3_t * dbg_intersection=nullptr, FILE * dbg_logfp=nullptr)
             {
                 // Get rangefinder rotation w.r.t. vehicle
                 vec3_t rangefinder_angles= {};
@@ -38,18 +38,28 @@ namespace simsens {
                 double dist = INFINITY;
                 vec3_t intersection = {};
                 for (auto wall : walls) {
-                    dist = min(dist, intersect_with_wall(
+                    const auto newdist = intersect_with_wall(
                                 vec3_t{robot_pose.x, robot_pose.y, robot_pose.z},
                                 robot_pose.psi + rangefinder_angles.z, // azimuth
                                 robot_pose.theta + rangefinder_angles.y, // elevation
                                 *wall,
-                                &intersection));
+                                &intersection);
+
+                    if (dbg_intersection!=nullptr && newdist < dist) {
+                        dbg_intersection->x = intersection.x;
+                        dbg_intersection->y = intersection.y;
+                        dbg_intersection->z = intersection.z;
+                    }
+
+                    dist = min(dist, newdist);
                 }
 
                 // Cut off distance at rangefinder's maximum
                 if (dist > max_distance_m) {
                     dist = INFINITY;
-                    intersection.z = -1;
+                    if (dbg_intersection!=nullptr) {
+                        dbg_intersection->z = -1;
+                    }
                 }
 
                 // Subtract sensor offset from distance
@@ -61,14 +71,9 @@ namespace simsens {
                 // Use just one distance for now
                 distances_mm[0] = dist == INFINITY ? -1 : dist * 1000;
 
-                // Support debugging
-                if (logfp && robot_pose.z > 0.18) {
-                    fprintf(logfp, "%d\n", distances_mm[0]);
-                }
-                if (dbg_intersection) {
-                    dbg_intersection->x = intersection.x;
-                    dbg_intersection->y = intersection.y;
-                    dbg_intersection->z = intersection.z;
+                // Support logging
+                if (dbg_logfp && robot_pose.z > 0.18) {
+                    fprintf(dbg_logfp, "%d\n", distances_mm[0]);
                 }
             }
 
