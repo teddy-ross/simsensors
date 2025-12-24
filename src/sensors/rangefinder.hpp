@@ -163,35 +163,6 @@ namespace simsens {
                 }
             }
 
-            // https://gist.github.com/kylemcdonald/6132fc1c29fd3767691442ba4bc84018
-            static bool line_segments_intersect(
-                    const double x1, const double y1,
-                    const double x2, const double y2,
-                    const double x3, const double y3,
-                    const double x4, const double y4,
-                    double & px, double & py)
-            {
-                const auto denom = (y4 - y3) * (x2 - x1) - (x4 - x3) * (y2 - y1);
-
-                if (denom != 0) {
-
-                    const auto ua = ((x4 - x3) * (y1 - y3) - (y4 - y3) * (x1 - x3)) / denom;
-                    const auto ub = ((x2 - x1) * (y1 - y3) - (y2 - y1) * (x1 - x3)) / denom;
-
-                    // Check if intersection point lies within both line segments (0 <=
-                    // ua <= 1 and 0 <= ub <= 1)
-                    if (0 <= ua && ua <= 1 && 0 <= ub && ub <= 1) {
-
-                        px = x1 + ua * (x2 - x1);
-                        py = y1 + ua * (y2 - y1);
-
-                        return true;
-                    }
-                }
-
-                return false;
-            }
-
             static double sqr(const double x)
             {
                 return x * x;
