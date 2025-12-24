@@ -100,8 +100,6 @@ namespace simsens {
 
         private:
 
-            FILE * _logfp;
-
             int width;
             int height; 
             double min_distance_m;
@@ -192,22 +190,6 @@ namespace simsens {
                 }
 
                 return false;
-            }
-
-
-            static bool ge(const double a, const double b)
-            {
-                return iszero(a-b) || a > b;
-            }
-
-            static bool le(const double a, const double b)
-            {
-                return iszero(a-b) || b > a;
-            }
-
-            static bool iszero(const double x)
-            {
-                return fabs(x) < 0.001; // mm precision
             }
 
             static double sqr(const double x)

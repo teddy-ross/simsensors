@@ -20,6 +20,8 @@
 
 #include <math.h>
 
+#include <sstypes.h>
+
 namespace simsens {
 
     // https://www.euclideanspace.com/maths/geometry/rotations/conversions/angleToEuler/index.htm
