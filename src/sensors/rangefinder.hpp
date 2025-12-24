@@ -34,18 +34,16 @@ namespace simsens {
                 vec3_t rangefinder_angles= {};
                 rotation_to_euler(rotation, rangefinder_angles);
 
-                // Use vehicle angles and rangefinder angle to get rangefinder
-                // azimuth and elevation angles
-                const auto azimuth_angle = robot_pose.psi + rangefinder_angles.z;
-                const auto elevation_angle = robot_pose.theta + rangefinder_angles.y;
-
                 // Run a classic calculate-min loop to get distance to closest wall
                 double dist = INFINITY;
                 vec3_t intersection = {};
                 for (auto wall : walls) {
                     dist = min(dist, intersect_with_wall(
-                            robot_pose, azimuth_angle, elevation_angle, *wall,
-                            &intersection));
+                                vec3_t{robot_pose.x, robot_pose.y, robot_pose.z},
+                                robot_pose.psi + rangefinder_angles.z, // azimuth
+                                robot_pose.theta + rangefinder_angles.y, // elevation
+                                *wall,
+                                &intersection));
                 }
 
                 // Cut off distance at rangefinder's maximum

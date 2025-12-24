@@ -102,7 +102,7 @@ namespace simsens {
     }
 
     static double intersect_with_wall(
-            const pose_t robot_pose,
+            const vec3_t robot_location,
             const double azimuth_angle,
             const double elevation_angle,
             const Wall & wall,
@@ -111,10 +111,10 @@ namespace simsens {
         static constexpr double MAX_WORLD_DIM_M = 20; // arbitrary
 
         // Calculate beam endpoints
-        const vec2_t beam_start_xy = {robot_pose.x, robot_pose.y};
+        const vec2_t beam_start_xy = {robot_location.x, robot_location.y};
         const vec2_t beam_end_xy = {
-            robot_pose.x + cos(azimuth_angle) * MAX_WORLD_DIM_M,
-            robot_pose.y - sin(azimuth_angle) * MAX_WORLD_DIM_M,
+            robot_location.x + cos(azimuth_angle) * MAX_WORLD_DIM_M,
+            robot_location.y - sin(azimuth_angle) * MAX_WORLD_DIM_M,
         };
 
 
@@ -151,7 +151,7 @@ namespace simsens {
                 - wall.size.x / 2;
 
             // Calculate Z in world coordinates
-            const auto pz = robot_pose.z + dz;
+            const auto pz = robot_location.z + dz;
 
             // If Z is below wall and XYZ distance is shorter than
             // current, update current

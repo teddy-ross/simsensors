@@ -32,9 +32,9 @@ namespace simsens {
         public:
 
             static bool detect(
-                    const vec3_t & robot_position, const vector<Wall *> walls)
+                    const vec3_t & robot_location, const vector<Wall *> walls)
             {
-                (void)robot_position;
+                (void)robot_location;
                 (void)walls;
 
                 return false;
