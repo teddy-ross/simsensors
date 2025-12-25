@@ -72,7 +72,7 @@ namespace simsens {
                 distances_mm[0] = dist == INFINITY ? -1 : dist * 1000;
 
                 // Support logging
-                if (dbg_logfp && robot_pose.z > 0.18) {
+                if (dbg_logfp) {
                     fprintf(dbg_logfp, "%d\n", distances_mm[0]);
                 }
             }
