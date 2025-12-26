@@ -37,14 +37,12 @@ namespace simsens {
                 for (auto wall : walls) {
 
                     if (
-                            intersect_with_wall_at_azimuth(
-                                robot_location, *wall, 0) || 
-                            intersect_with_wall_at_azimuth(
-                                robot_location, *wall, M_PI/2) || 
-                            intersect_with_wall_at_azimuth(
-                                robot_location, *wall, M_PI) || 
-                            intersect_with_wall_at_azimuth(
-                                robot_location, *wall, 3*M_PI/2)) {
+                            intersect_with_wall_at_azimuth(robot_location, *wall, 0) 
+                            || intersect_with_wall_at_azimuth(robot_location, *wall, M_PI/2)
+                            || intersect_with_wall_at_azimuth(robot_location, *wall, M_PI) 
+                            || intersect_with_wall_at_azimuth(robot_location, *wall, 3*M_PI/2)
+                       ) 
+                    {
                         return true;
                     }
                 }

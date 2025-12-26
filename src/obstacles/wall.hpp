@@ -31,6 +31,7 @@ namespace simsens {
             vec3_t translation;
             rotation_t rotation;
             vec3_t size;
+            char name[100];
 
             Wall()
             {
