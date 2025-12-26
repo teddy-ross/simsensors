@@ -55,8 +55,7 @@ namespace simsens {
                                     _wall->rotation);
                             ParserUtils::try_parse_vec3(line, "size",
                                     _wall->size);
-                            ParserUtils::try_parse_string(line, "name",
-                                    _wall->name);
+                            ParserUtils::try_parse_name(line, _wall->name);
 
                             if (ParserUtils::string_contains(line, "}")) {
                                 walls.push_back(_wall);

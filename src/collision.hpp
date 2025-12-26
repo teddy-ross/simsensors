@@ -32,7 +32,8 @@ namespace simsens {
         public:
 
             static bool detect(
-                    const vec3_t & robot_location, const vector<Wall *> walls)
+                    const vec3_t & robot_location, const vector<Wall *> walls,
+                    const bool debug=false)
             {
                 for (auto wall : walls) {
 
@@ -43,6 +44,9 @@ namespace simsens {
                             || intersect_with_wall_at_azimuth(robot_location, *wall, 3*M_PI/2)
                        ) 
                     {
+                        if (debug) {
+                            printf("collided with wall: %s\n", wall->name);
+                        }
                         return true;
                     }
                 }
