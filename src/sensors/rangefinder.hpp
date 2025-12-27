@@ -28,7 +28,8 @@ namespace simsens {
 
             void read(const pose_t & robot_pose, const vector<Wall *> walls,
                     int * distances_mm,
-                    vec3_t * dbg_intersection=nullptr, FILE * dbg_logfp=nullptr)
+                    FILE * dbg_logfp=nullptr,
+                    vec3_t * dbg_intersection=nullptr)
             {
                 // Get rangefinder rotation w.r.t. vehicle
                 vec3_t rangefinder_angles= {};
