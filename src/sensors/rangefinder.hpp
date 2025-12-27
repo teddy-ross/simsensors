@@ -31,6 +31,12 @@ namespace simsens {
                     FILE * dbg_logfp=nullptr,
                     vec3_t * dbg_intersection=nullptr)
             {
+                for (int k=0; k<width; ++k) {
+                    //printf("%+3.3f ", (float)k/width - 0.5);
+                    printf("%+3.3f ", k / (width - 1.) - 0.5);
+                }
+                printf("\n");
+
                 // Get rangefinder rotation w.r.t. vehicle
                 vec3_t rangefinder_angles= {};
                 rotation_to_euler(rotation, rangefinder_angles);
