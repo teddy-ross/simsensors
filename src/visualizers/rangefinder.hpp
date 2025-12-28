@@ -44,14 +44,15 @@ namespace simsens {
 
                     for (uint8_t y=0; y<this->rangefinder->height; ++y) {
 
-                        const int d = distances_mm[y * this->rangefinder->width + x];
+                        const int d_mm = distances_mm[y * this->rangefinder->width + x];
 
                         cv::rectangle(img,
                                 cv::Point(x*scaleup, y*scaleup),
                                 cv::Point((x+1)*scaleup, (y+1)*scaleup),
-                                d == -1 ? 255 : (uint8_t)((d-this->rangefinder->min_distance_mm) /
-                                    (double)(this->rangefinder->max_distance_mm -
-                                        this->rangefinder->min_distance_mm) * 255), 
+                                d_mm == -1 ? 255 : (uint8_t)((d_mm/1000. - 
+                                        this->rangefinder->min_distance_m) /
+                                    (double)(this->rangefinder->max_distance_m -
+                                        this->rangefinder->min_distance_m) * 255), 
                                 -1);
                     }
                 }
