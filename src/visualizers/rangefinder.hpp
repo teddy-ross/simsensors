@@ -40,9 +40,6 @@ namespace simsens {
 
                 cv::Mat img = cv::Mat::zeros(new_height, new_width, CV_8UC1);
 
-                const double dmin_m = this->rangefinder->min_distance_m;
-                const double dmax_m = this->rangefinder->max_distance_m;
-
                 for (uint8_t x=0; x<this->rangefinder->width; ++x) {
 
                     for (uint8_t y=0; y<this->rangefinder->height; ++y) {
@@ -52,8 +49,7 @@ namespace simsens {
                         cv::rectangle(img,
                                 cv::Point(x*scaleup, y*scaleup),
                                 cv::Point((x+1)*scaleup, (y+1)*scaleup),
-                                d_mm == -1 ? 255 : (uint8_t)((d_mm/1000. - dmin_m) /
-                                    (double)(dmax_m - dmin_m) * 255), 
+                                distance_to_grayscale(d_mm), 
                                 -1);
                     }
                 }
@@ -66,6 +62,15 @@ namespace simsens {
         private:
 
             SimRangefinder * rangefinder;
+
+            uint8_t distance_to_grayscale(const int d_mm)
+            {
+                const double dmin_m = this->rangefinder->min_distance_m;
+                const double dmax_m = this->rangefinder->max_distance_m;
+
+                return d_mm == -1 ? 255 : 
+                    (uint8_t)((d_mm/1000. - dmin_m) / (double)(dmax_m - dmin_m) * 255);
+            }
     };
 
 }
