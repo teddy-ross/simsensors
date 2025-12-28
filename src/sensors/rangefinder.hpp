@@ -27,20 +27,17 @@ namespace simsens {
         public:
 
             void read(const pose_t & robot_pose, const vector<Wall *> walls,
-                    int * distances_mm,
-                    FILE * dbg_logfp=nullptr,
+                    int * distances_mm, int & width, int & height,
                     vec3_t * dbg_intersection=nullptr)
             {
                 (void)dbg_intersection;
 
-                for (int k=0; k<width; ++k) {
+                width = this->width;
+                height = this->height;
+
+                for (int k=0; k<this->width; ++k) {
 
                     distances_mm[k] = distance_on_beam(robot_pose, walls, k);
-
-                    if (dbg_logfp) {
-                        fprintf(dbg_logfp, "%d%c",
-                                distances_mm[k], (k==width-1)?'\n':',');
-                    }
                 }
             }
 
