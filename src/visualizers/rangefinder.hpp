@@ -35,16 +35,20 @@ namespace simsens {
 
             void show(const int * distances_mm, const int scaleup) 
             {
-                const int new_width = this->rangefinder->width * scaleup;
-                const int new_height = this->rangefinder->height * scaleup;
+                const int width = this->rangefinder->getWidth();
+                const int height = this->rangefinder->getHeight();
+
+                const int new_width = width * scaleup;
+                const int new_height = height * scaleup;
 
                 cv::Mat img = cv::Mat::zeros(new_height, new_width, CV_8UC1);
 
-                for (uint8_t x=0; x<this->rangefinder->width; ++x) {
+                for (uint8_t x=0; x<width; ++x) {
 
-                    for (uint8_t y=0; y<this->rangefinder->height; ++y) {
+                    for (uint8_t y=0; y<height; ++y) {
 
-                        const int d_mm = distances_mm[y * this->rangefinder->width + x];
+                        const int d_mm =
+                            distances_mm[y * width + x];
 
                         cv::rectangle(img,
                                 cv::Point(x*scaleup, y*scaleup),
