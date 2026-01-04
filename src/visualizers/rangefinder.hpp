@@ -33,7 +33,8 @@ namespace simsens {
                 this->rangefinder = rangefinder;
             }
 
-            void show(const int * distances_mm, const int scaleup) 
+            void show(const int * distances_mm, const int scaleup,
+                    const bool visible=true) 
             {
                 const int width = this->rangefinder->getWidth();
                 const int height = this->rangefinder->getHeight();
@@ -53,7 +54,7 @@ namespace simsens {
                         cv::rectangle(img,
                                 cv::Point(x*scaleup, y*scaleup),
                                 cv::Point((x+1)*scaleup, (y+1)*scaleup),
-                                distance_to_grayscale(d_mm), 
+                                visible ? distance_to_grayscale(d_mm) : 0, 
                                 -1);
                     }
                 }
@@ -61,11 +62,15 @@ namespace simsens {
                 cv::imshow("lidar", img);
 
                 cv::waitKey(1);
+
+                _visible = true;
             }
 
         private:
 
             Rangefinder * rangefinder;
+
+            bool _visible;
 
             uint8_t distance_to_grayscale(const int d_mm)
             {
