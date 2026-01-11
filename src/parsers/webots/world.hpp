@@ -20,6 +20,7 @@
 
 #include <stdio.h>
 
+#include <simsensors/src/math.hpp>
 #include <simsensors/src/parsers/webots/utils.hpp>
 #include <simsensors/src/obstacles/wall.hpp>
 
@@ -30,6 +31,8 @@ namespace simsens {
         public:
 
             vector<Wall *> walls;
+
+            pose_t robotPose;
 
             void parse(
                     const string world_file_name,
@@ -42,6 +45,8 @@ namespace simsens {
                     string line;
 
                     Wall * _wall = nullptr;
+
+                    bool in_robot = false;
 
                     while (getline(file, line)) {
 
@@ -59,7 +64,8 @@ namespace simsens {
                                     _wall->size);
                             ParserUtils::try_parse_name(line, _wall->name);
 
-                            if (ParserUtils::string_contains(line, "}")) {
+                            if (endOfBlock(line)) {
+
                                 walls.push_back(_wall);
                                 _wall = nullptr;
                             }
@@ -67,7 +73,33 @@ namespace simsens {
 
                         if (robot_name.size() > 0 && 
                                 ParserUtils::string_contains(line, robot_name)) {
-                            printf(">>> %s <<<\n", line.c_str());
+                            in_robot = true;
+                        }
+
+                        if (in_robot) {
+
+                            vec3_t trans = {};
+                            if (ParserUtils::try_parse_vec3(line, "translation",
+                                    trans)) {
+                                robotPose.x = trans.x;
+                                robotPose.y = trans.y;
+                                robotPose.z = trans.z;
+                            }
+
+                            rotation_t rot = {};
+                            if (ParserUtils::try_parse_rotation(line, "rotation",
+                                    rot)) {
+                                vec3_t euler = {};
+                                rotation_to_euler(rot, euler);
+                                robotPose.phi = euler.x;
+                                robotPose.theta = euler.y;
+                                robotPose.psi = euler.z;
+                            }
+
+                            if (endOfBlock(line)) {
+                                in_robot = false;
+                            }
+
                         }
                     }
                 }
@@ -84,5 +116,13 @@ namespace simsens {
                     wall->dump();
                 }
             }
+
+        private:
+
+            static bool endOfBlock(const string line) {
+
+                return ParserUtils::string_contains(line, "}");
+            }
+
     };
 }
