@@ -56,13 +56,7 @@ namespace simsens {
 
                         if (_wall) {
 
-                            ParserUtils::try_parse_vec3(line, "translation",
-                                    _wall->translation);
-                            ParserUtils::try_parse_rotation(line, "rotation",
-                                    _wall->rotation);
-                            ParserUtils::try_parse_vec3(line, "size",
-                                    _wall->size);
-                            ParserUtils::try_parse_name(line, _wall->name);
+                            parseWall(line, _wall);
 
                             if (endOfBlock(line)) {
 
@@ -78,23 +72,7 @@ namespace simsens {
 
                         if (in_robot) {
 
-                            vec3_t trans = {};
-                            if (ParserUtils::try_parse_vec3(line, "translation",
-                                    trans)) {
-                                robotPose.x = trans.x;
-                                robotPose.y = trans.y;
-                                robotPose.z = trans.z;
-                            }
-
-                            rotation_t rot = {};
-                            if (ParserUtils::try_parse_rotation(line, "rotation",
-                                    rot)) {
-                                vec3_t euler = {};
-                                rotation_to_euler(rot, euler);
-                                robotPose.phi = euler.x;
-                                robotPose.theta = euler.y;
-                                robotPose.psi = euler.z;
-                            }
+                            parseRobot(line);
 
                             if (endOfBlock(line)) {
                                 in_robot = false;
@@ -122,6 +100,39 @@ namespace simsens {
             static bool endOfBlock(const string line) {
 
                 return ParserUtils::string_contains(line, "}");
+            }
+
+            void parseWall(const string line, Wall * wall)
+            {
+                ParserUtils::try_parse_vec3(line, "translation",
+                        wall->translation);
+                ParserUtils::try_parse_rotation(line, "rotation",
+                        wall->rotation);
+                ParserUtils::try_parse_vec3(line, "size",
+                        wall->size);
+                ParserUtils::try_parse_name(line, wall->name);
+            }
+
+            void parseRobot(const string line)
+            {
+                vec3_t trans = {};
+                if (ParserUtils::try_parse_vec3(line, "translation",
+                            trans)) {
+                    robotPose.x = trans.x;
+                    robotPose.y = trans.y;
+                    robotPose.z = trans.z;
+                }
+
+                rotation_t rot = {};
+                if (ParserUtils::try_parse_rotation(line, "rotation",
+                            rot)) {
+                    vec3_t euler = {};
+                    rotation_to_euler(rot, euler);
+                    robotPose.phi = euler.x;
+                    robotPose.theta = euler.y;
+                    robotPose.psi = euler.z;
+                }
+
             }
 
     };
