@@ -20,6 +20,7 @@
 
 #include <simsensors/src/parsers/webots/world.hpp>
 #include <simsensors/src/parsers/webots/robot.hpp>
+#include <simsensors/src/world.hpp>
 
 int main(int argc, char ** argv) 
 {
@@ -29,9 +30,11 @@ int main(int argc, char ** argv)
 
     else {
 
-        const std::string world =  argv[1];
+        simsens::World world = {};
+
+        const std::string worldname =  argv[1];
         static simsens::WorldParser _worldParser;
-        _worldParser.parse(world);
+        _worldParser.parse(worldname, world);
         _worldParser.report();
 
         const std::string robot =  argv[2];

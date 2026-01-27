@@ -16,6 +16,8 @@ CFLAGS = -O3 -std=c++11 -Wall -Wextra
 
 ROOTDIR = ../../..
 
+SRCDIR = $(ROOTDIR)/simsensors/src
+
 HFDIR = $(HOME)/Desktop/hackflight/webots
 
 EXE = main
@@ -28,7 +30,7 @@ run: $(EXE)
 $(EXE): $(EXE).o
 	g++ -o $(EXE) $(EXE).o
 
-$(EXE).o: $(EXE).cpp  $(SRCDIR)/*/*.*
+$(EXE).o: $(EXE).cpp  $(SRCDIR)/*/*.* $(SRCDIR)/parsers/webots/*.*
 	g++ -c -I$(ROOTDIR) $(EXE).cpp
 
 clean:

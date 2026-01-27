@@ -23,6 +23,7 @@
 #include <simsensors/src/math.hpp>
 #include <simsensors/src/parsers/webots/utils.hpp>
 #include <simsensors/src/obstacles/wall.hpp>
+#include <simsensors/src/world.hpp>
 
 namespace simsens {
 
@@ -36,6 +37,7 @@ namespace simsens {
 
             void parse(
                     const string world_file_name,
+                    World & world,
                     const string robot_name="")
             {
                 ifstream file(world_file_name);
@@ -61,6 +63,7 @@ namespace simsens {
                             if (endOfBlock(line)) {
 
                                 walls.push_back(_wall);
+                                world.walls.push_back(_wall);
                                 _wall = nullptr;
                             }
                         }
