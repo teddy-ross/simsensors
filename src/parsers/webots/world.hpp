@@ -46,6 +46,8 @@ namespace simsens {
 
                     bool in_robot = false;
 
+                    world.y_inverted = true;
+
                     while (getline(file, line)) {
 
                         if (ParserUtils::string_contains(line, "Wall {")) {
@@ -97,10 +99,13 @@ namespace simsens {
             {
                 ParserUtils::try_parse_vec3(line, "translation",
                         wall->translation);
+
                 ParserUtils::try_parse_rotation(line, "rotation",
                         wall->rotation);
+
                 ParserUtils::try_parse_vec3(line, "size",
                         wall->size);
+
                 ParserUtils::try_parse_name(line, wall->name);
             }
 

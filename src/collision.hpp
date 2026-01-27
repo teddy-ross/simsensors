@@ -24,6 +24,7 @@ using namespace::std;
 #include <simsensors/src/math.hpp>
 #include <simsensors/src/types.h>
 #include <simsensors/src/obstacles/wall.hpp>
+#include <simsensors/src/world.hpp>
 
 namespace simsens {
 
@@ -32,10 +33,11 @@ namespace simsens {
         public:
 
             static bool detect(
-                    const vec3_t & robot_location, const vector<Wall *> walls,
+                    const vec3_t & robot_location,
+                    const  World & world,
                     const bool debug=false)
             {
-                for (auto wall : walls) {
+                for (auto wall : world.walls) {
 
                     if (
                             intersect_with_wall_at_azimuth(robot_location, *wall, 0) 

@@ -30,6 +30,8 @@ namespace simsens {
 
             pose_t robotPose;
 
+            bool y_inverted;
+
             void report()
             {
                 for (auto wall : walls) {
