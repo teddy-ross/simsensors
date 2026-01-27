@@ -29,12 +29,12 @@ namespace simsens {
 
         public:
 
-            void read(const pose_t & robot_pose, const vector<Wall *> walls,
+            void read(const pose_t & robot_pose, const World & world,
                     int * distances_mm)
             {
                 for (int k=0; k<this->width; ++k) {
 
-                    distances_mm[k] = distance_on_beam(robot_pose, walls, k);
+                    distances_mm[k] = distance_on_beam(robot_pose, world.walls, k);
                 }
             }
 
