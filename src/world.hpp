@@ -32,11 +32,27 @@ namespace simsens {
 
             bool y_inverted;
 
+            vec3_t adjust_location(const vec3_t & loc)
+            {
+                return {loc.x, yinvert(loc.y), loc.z};
+            }
+
+            pose_t adjust_pose(const pose_t & pose)
+            {
+                return {pose.x, yinvert(pose.y), pose.z,
+                        pose.phi, pose.theta, pose.psi};
+            }
+
             void report()
             {
                 for (auto wall : walls) {
                     wall->dump();
                 }
+            }
+
+            double yinvert(const double y)
+            {
+                return y_inverted ? -y : y;
             }
     };
 }

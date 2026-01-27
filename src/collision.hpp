@@ -34,16 +34,18 @@ namespace simsens {
 
             static bool detect(
                     const vec3_t & robot_location,
-                    const  World & world,
+                    World & world,
                     const bool debug=false)
             {
+                const auto robloc = world.adjust_location(robot_location);
+
                 for (auto wall : world.walls) {
 
                     if (
-                            intersect_with_wall_at_azimuth(robot_location, *wall, 0) 
-                            || intersect_with_wall_at_azimuth(robot_location, *wall, M_PI/2)
-                            || intersect_with_wall_at_azimuth(robot_location, *wall, M_PI) 
-                            || intersect_with_wall_at_azimuth(robot_location, *wall, 3*M_PI/2)
+                            intersect_with_wall_at_azimuth(robloc, *wall, 0) 
+                            || intersect_with_wall_at_azimuth(robloc, *wall, M_PI/2)
+                            || intersect_with_wall_at_azimuth(robloc, *wall, M_PI) 
+                            || intersect_with_wall_at_azimuth(robloc, *wall, 3*M_PI/2)
                        ) 
                     {
                         if (debug) {
