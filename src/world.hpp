@@ -28,5 +28,13 @@ namespace simsens {
 
             vector<Wall *> walls;
 
+            pose_t robotPose;
+
+            void report()
+            {
+                for (auto wall : walls) {
+                    wall->dump();
+                }
+            }
     };
 }

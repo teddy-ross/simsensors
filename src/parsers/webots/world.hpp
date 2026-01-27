@@ -31,11 +31,7 @@ namespace simsens {
 
         public:
 
-            vector<Wall *> walls;
-
-            pose_t robotPose;
-
-            void parse(
+            static void parse(
                     const string world_file_name,
                     World & world,
                     const string robot_name="")
@@ -62,7 +58,6 @@ namespace simsens {
 
                             if (endOfBlock(line)) {
 
-                                walls.push_back(_wall);
                                 world.walls.push_back(_wall);
                                 _wall = nullptr;
                             }
@@ -75,7 +70,7 @@ namespace simsens {
 
                         if (in_robot) {
 
-                            parseRobot(line);
+                            parseRobot(line, world);
 
                             if (endOfBlock(line)) {
                                 in_robot = false;
@@ -91,13 +86,6 @@ namespace simsens {
                 }
             }
 
-            void report()
-            {
-                for (auto wall : walls) {
-                    wall->dump();
-                }
-            }
-
         private:
 
             static bool endOfBlock(const string line) {
@@ -105,7 +93,7 @@ namespace simsens {
                 return ParserUtils::string_contains(line, "}");
             }
 
-            void parseWall(const string line, Wall * wall)
+            static void parseWall(const string line, Wall * wall)
             {
                 ParserUtils::try_parse_vec3(line, "translation",
                         wall->translation);
@@ -116,14 +104,14 @@ namespace simsens {
                 ParserUtils::try_parse_name(line, wall->name);
             }
 
-            void parseRobot(const string line)
+            static void parseRobot(const string line, World & world)
             {
                 vec3_t trans = {};
                 if (ParserUtils::try_parse_vec3(line, "translation",
                             trans)) {
-                    robotPose.x = trans.x;
-                    robotPose.y = trans.y;
-                    robotPose.z = trans.z;
+                    world.robotPose.x = trans.x;
+                    world.robotPose.y = trans.y;
+                    world.robotPose.z = trans.z;
                 }
 
                 rotation_t rot = {};
@@ -131,9 +119,9 @@ namespace simsens {
                             rot)) {
                     vec3_t euler = {};
                     rotation_to_euler(rot, euler);
-                    robotPose.phi = euler.x;
-                    robotPose.theta = euler.y;
-                    robotPose.psi = euler.z;
+                    world.robotPose.phi = euler.x;
+                    world.robotPose.theta = euler.y;
+                    world.robotPose.psi = euler.z;
                 }
 
             }

@@ -23,6 +23,7 @@
 #include <simsensors/src/parsers/webots/utils.hpp>
 #include <simsensors/src/sensors/rangefinder.hpp>
 #include <simsensors/src/math.hpp>
+#include <simsensors/src/robot.hpp>
 
 namespace simsens {
 
@@ -30,9 +31,7 @@ namespace simsens {
 
         public:
 
-            vector<Rangefinder *> rangefinders;
-
-            void parse(const string robot_file_name)
+            static void parse(const string robot_file_name, Robot & robot)
             {
                 ifstream file(robot_file_name);
 
@@ -74,7 +73,7 @@ namespace simsens {
 
                             if (ParserUtils::string_contains(line, "}") ||
                                     ParserUtils::string_contains(line, "children")) {
-                                rangefinders.push_back(rangefinder);
+                                robot.rangefinders.push_back(rangefinder);
                                 rangefinder = nullptr;
                             }
                         }
@@ -86,16 +85,6 @@ namespace simsens {
                             robot_file_name.c_str());
                 }
             }
-
-            void report()
-            {
-                for (auto rangefinder : rangefinders) {
-                    rangefinder->dump();
-                }
-            }
-
-        private:
-
     };
 
 }

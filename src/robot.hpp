@@ -1,5 +1,5 @@
 /* 
-   Webots world-parsing tester
+   Simple robot representation for simulators
 
    Copyright (C) 2025 Simon D. Levy
 
@@ -16,28 +16,24 @@
    along with this program. If not, see <http:--www.gnu.org/licenses/>.
  */
 
-#include <stdio.h>
+#pragma once
 
-#include <simsensors/src/parsers/webots/world.hpp>
-#include <simsensors/src/parsers/webots/robot.hpp>
-#include <simsensors/src/world.hpp>
+#include <simsensors/src/sensors/rangefinder.hpp>
 
-int main(int argc, char ** argv) 
-{
-    if (argc < 3) {
-        fprintf(stderr, "Usage: %s WORLDFILE ROBOTFILE\n", argv[0]);
-    }
+namespace simsens {
 
-    else {
+    class Robot {
 
-        simsens::World world = {};
-        simsens::WorldParser::parse(argv[1], world);
-        world.report();
+        public:
 
-        simsens::Robot robot = {};
-        simsens::RobotParser::parse(argv[2], robot);
-        robot.report();
-    }
+            vector<Rangefinder *> rangefinders;
 
-    return 0;
+            void report()
+            {
+                for (auto rangefinder : rangefinders) {
+                    rangefinder->dump();
+                }
+            }
+    };
+
 }
