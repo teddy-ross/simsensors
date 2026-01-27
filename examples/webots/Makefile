@@ -18,14 +18,12 @@ ROOTDIR = ../../..
 
 SRCDIR = $(ROOTDIR)/simsensors/src
 
-HFDIR = $(HOME)/Desktop/hackflight/webots
-
 EXE = main
 
 all: $(EXE)
 
 run: $(EXE)
-	./$(EXE) $(HFDIR)/worlds/maze.wbt $(HFDIR)/protos/DiyQuad.proto 
+	./$(EXE) maze.wbt DiyQuad.proto 
 
 $(EXE): $(EXE).o
 	g++ -o $(EXE) $(EXE).o
