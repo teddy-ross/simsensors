@@ -34,7 +34,7 @@ namespace simsens {
             static void parse(
                     const string world_file_name,
                     World & world,
-                    const string robot_name="")
+                    const string robot_path="")
             {
                 ifstream file(world_file_name);
 
@@ -65,9 +65,15 @@ namespace simsens {
                             }
                         }
 
-                        if (robot_name.size() > 0 && 
-                                ParserUtils::string_contains(line, robot_name)) {
-                            in_robot = true;
+                        if (robot_path.size() > 0) {
+                            size_t slash_pos = robot_path.rfind('/');
+                            size_t dot_pos = robot_path.rfind('.');
+                            const auto robot_name = robot_path.substr(slash_pos+1, dot_pos-slash_pos-1);
+                            char name_with_curly[100] = {};
+                            sprintf(name_with_curly, "%s {", robot_name.c_str());
+                            if( ParserUtils::string_contains(line, name_with_curly)) {
+                                in_robot = true;
+                            }
                         }
 
                         if (in_robot) {
