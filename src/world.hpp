@@ -24,7 +24,11 @@ namespace simsens {
 
     class World {
 
-        public:
+        friend class WorldParser;
+        friend class Rangefinder;
+        friend class CollisionDetector;
+
+        private:
 
             vector<Wall *> walls;
 
@@ -43,21 +47,23 @@ namespace simsens {
                         pose.phi, pose.theta, pose.psi};
             }
 
-            void report()
-            {
-                for (auto wall : walls) {
-                    wall->dump();
-                }
-            }
-
             double yinvert(const double y)
             {
                 return y_inverted ? -y : y;
             }
 
+        public:
+
             pose_t getRobotPose()
             {
                 return robotPose;
+            }
+
+            void report()
+            {
+                for (auto wall : walls) {
+                    wall->dump();
+                }
             }
 
     };
