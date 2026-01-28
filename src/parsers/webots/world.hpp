@@ -115,7 +115,7 @@ namespace simsens {
                 if (ParserUtils::try_parse_vec3(line, "translation",
                             trans)) {
                     world.robotPose.x = trans.x;
-                    world.robotPose.y = trans.y;
+                    world.robotPose.y = -trans.y;
                     world.robotPose.z = trans.z;
                 }
 
@@ -126,7 +126,7 @@ namespace simsens {
                     rotation_to_euler(rot, euler);
                     world.robotPose.phi = euler.x;
                     world.robotPose.theta = euler.y;
-                    world.robotPose.psi = euler.z;
+                    world.robotPose.psi = -euler.z;
                 }
 
             }

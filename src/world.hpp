@@ -54,5 +54,11 @@ namespace simsens {
             {
                 return y_inverted ? -y : y;
             }
+
+            pose_t getRobotPose()
+            {
+                return robotPose;
+            }
+
     };
 }
