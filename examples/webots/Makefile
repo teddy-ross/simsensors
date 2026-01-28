@@ -28,7 +28,7 @@ run: $(EXE)
 $(EXE): $(EXE).o
 	g++ -o $(EXE) $(EXE).o
 
-$(EXE).o: $(EXE).cpp  $(SRCDIR)/*/*.* $(SRCDIR)/parsers/webots/*.*
+$(EXE).o: $(EXE).cpp  $(SRCDIR)/*.* $(SRCDIR)/*/*.* $(SRCDIR)/parsers/webots/*.*
 	g++ -c -I$(ROOTDIR) $(EXE).cpp
 
 clean:

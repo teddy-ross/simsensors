@@ -52,7 +52,49 @@ namespace simsens {
                 return y_inverted ? -y : y;
             }
 
-        public:
+            // Arbitrary limits
+            static constexpr double COLLISION_TOLERANCE_M = 0.05;
+
+            static bool intersect_with_wall_at_azimuth(
+                    const vec3_t & robot_location,
+                    const Wall & wall,
+                    const double azimuth)
+            {
+                return intersect_with_wall(
+                        robot_location,
+                        azimuth,
+                        0, // elevation
+                        wall)
+
+                    < COLLISION_TOLERANCE_M;
+            }
+
+         public:
+
+            bool collided(
+                    const vec3_t & robot_location, const bool debug=false)
+            {
+                const auto robloc = adjust_location(robot_location);
+
+                for (auto wall : walls) {
+
+                    if (
+                            intersect_with_wall_at_azimuth(robloc, *wall, 0) 
+                            || intersect_with_wall_at_azimuth(robloc, *wall, M_PI/2)
+                            || intersect_with_wall_at_azimuth(robloc, *wall, M_PI) 
+                            || intersect_with_wall_at_azimuth(robloc, *wall, 3*M_PI/2)
+                       ) 
+                    {
+                        if (debug) {
+                            printf("collided with wall: %s\n", wall->name);
+                        }
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+
 
             pose_t getRobotPose()
             {
