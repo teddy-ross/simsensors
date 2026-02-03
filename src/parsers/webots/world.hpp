@@ -70,7 +70,7 @@ namespace simsens {
                             size_t dot_pos = robot_path.rfind('.');
                             const auto robot_name = robot_path.substr(slash_pos+1, dot_pos-slash_pos-1);
                             char name_with_curly[100] = {};
-                            sprintf(name_with_curly, "%s {", robot_name.c_str());
+                            printf(name_with_curly, "%s {", robot_name.c_str());
                             if( ParserUtils::string_contains(line, name_with_curly)) {
                                 in_robot = true;
                             }
