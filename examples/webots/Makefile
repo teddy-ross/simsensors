@@ -23,7 +23,7 @@ EXE = main
 all: $(EXE)
 
 run: $(EXE)
-	./$(EXE) maze.wbt DiyQuad.proto 
+	./$(EXE) twoexit.wbt DiyQuad.proto 
 
 $(EXE): $(EXE).o
 	g++ -o $(EXE) $(EXE).o
