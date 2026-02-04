@@ -30,6 +30,10 @@ def _parse_wall(line, wall):
     if rotation is not None:
         wall.rotation = rotation
 
+    size = try_parse_vec(line, 'size')
+    if size is not None:
+        wall.size = size
+
 def parse(worldfile, robot_path=None):
 
     world = World()
@@ -48,7 +52,7 @@ def parse(worldfile, robot_path=None):
 
             if '}' in line:
                 if wall is not None:
-                    print('wall: ', wall.translation, wall.rotation)
+                    print('wall: ', wall.translation, wall.rotation, wall.size)
                     world.walls.append(wall)
                 wall = None
 
