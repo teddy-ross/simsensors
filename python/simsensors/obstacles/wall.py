@@ -20,5 +20,8 @@ class Wall :
 
     def __init__(self):
 
-        pass
+        self.translation = None
+        self.rotation = (0, 0, 1, 0)
+        self.size = None
+        self.name = None
 

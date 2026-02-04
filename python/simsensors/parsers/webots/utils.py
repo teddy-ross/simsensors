@@ -14,6 +14,6 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <http:--www.gnu.org/licenses/>.
 '''
 
-def try_parse_vec3(line, field_name):
+def try_parse_vec(line, field_name):
 
     return tuple(map(float, line.split()[1:])) if field_name in line else None
