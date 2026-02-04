@@ -17,12 +17,16 @@
    along with this program. If not, see <http:--www.gnu.org/licenses/>.
 '''
 
-from simsensors.parsers.webots.world import WorldParser
+from simsensors.parsers.webots.world import parse
 
-DATADIR = '../data/'
+DATADIR = '../../../data/webots/'
 
 WORLD = DATADIR + 'twoexit.wbt'
 ROBOT = DATADIR + 'DiyQuad.proto'
+
+world = parse(WORLD)
+
+print(world)
 
 '''
 int main(int argc, char ** argv) 

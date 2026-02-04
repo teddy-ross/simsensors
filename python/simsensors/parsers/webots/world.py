@@ -1,21 +1,28 @@
 '''
-roboviz.py - Python classes for simulating sensors
+Python classes parsing Webots .wbt world files
 
 Copyright (C) 2026 Simon D. Levy
 
 This program is free software: you can redistribute it and/or modify
-it under the terms of the GNU Lesser General Public License as
-published by the Free Software Foundation, either version 3 of the
-License, or (at your option) any later version.
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, in version 3.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
 GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with this program. If not, see <http:--www.gnu.org/licenses/>.
 '''
 
-class WorldParser:
+def parse(worldfile, robot_path=None):
 
-    def __init__(self):
+    with open(worldfile) as file:
 
-        pass
+        for line in file.read().split():
+
+            print(line)
+
+    return None
+
