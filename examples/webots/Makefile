@@ -18,12 +18,14 @@ ROOTDIR = ../../..
 
 SRCDIR = $(ROOTDIR)/simsensors/src
 
+DATADIR = ../../data/webots
+
 EXE = main
 
 all: $(EXE)
 
 run: $(EXE)
-	./$(EXE) twoexit.wbt DiyQuad.proto 
+	./$(EXE) $(DATADIR)/twoexit.wbt $(DATADIR)/DiyQuad.proto 
 
 $(EXE): $(EXE).o
 	g++ -o $(EXE) $(EXE).o
