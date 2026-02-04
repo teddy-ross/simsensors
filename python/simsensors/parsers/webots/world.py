@@ -18,6 +18,13 @@ along with this program. If not, see <http:--www.gnu.org/licenses/>.
 
 from simsensors.world import World
 from simsensors.obstacles import Wall
+from simsensors.parsers.webots.utils import try_parse_vec3
+
+def _parse_wall(line, wall):
+
+    translation = try_parse_vec3(line, 'translation')
+    if translation is not None:
+        print(translation)
 
 def parse(worldfile, robot_path=None):
 
@@ -33,9 +40,10 @@ def parse(worldfile, robot_path=None):
                 wall = Wall()
 
             if wall is not None:
-                pass
+                _parse_wall(line, wall)
 
             if '}' in line:
+                world.walls.append(wall)
                 wall = None
 
     return world
