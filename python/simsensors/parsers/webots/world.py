@@ -16,13 +16,27 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <http:--www.gnu.org/licenses/>.
 '''
 
+from simsensors.world import World
+from simsensors.obstacles import Wall
+
 def parse(worldfile, robot_path=None):
+
+    world = World()
 
     with open(worldfile) as file:
 
-        for line in file.read().split():
+        wall = None
 
-            print(line)
+        for line in file.read().split('\n'):
 
-    return None
+            if 'Wall {' in line:
+                wall = Wall()
+
+            if wall is not None:
+                pass
+
+            if '}' in line:
+                wall = None
+
+    return world
 
