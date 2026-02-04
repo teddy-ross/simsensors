@@ -24,4 +24,3 @@ class Wall :
         self.rotation = (0, 0, 1, 0)
         self.size = None
         self.name = None
-

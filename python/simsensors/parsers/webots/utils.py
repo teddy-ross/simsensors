@@ -17,3 +17,10 @@ along with this program. If not, see <http:--www.gnu.org/licenses/>.
 def try_parse_vec(line, field_name):
 
     return tuple(map(float, line.split()[1:])) if field_name in line else None
+
+
+def try_parse_string(line, field_name):
+
+    return line.split()[1:][0] if field_name in line else None
+
+
