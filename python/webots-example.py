@@ -17,12 +17,12 @@
    along with this program. If not, see <http:--www.gnu.org/licenses/>.
 '''
 
-from sys import argv
+from simsensors.parsers.webots.world import WorldParser
 
-if len(argv) < 3:
-    print('Usage: %s WORLDFILE ROBOTFILE' % argv[0]);
-    exit(1)
+DATADIR = '../data/'
 
+WORLD = DATADIR + 'twoexit.wbt'
+ROBOT = DATADIR + 'DiyQuad.proto'
 
 '''
 int main(int argc, char ** argv) 
