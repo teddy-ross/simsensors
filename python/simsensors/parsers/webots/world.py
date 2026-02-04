@@ -1,6 +1,4 @@
 '''
-Python classes parsing Webots .wbt world files
-
 Copyright (C) 2026 Simon D. Levy
 
 This program is free software: you can redistribute it and/or modify
@@ -46,4 +44,3 @@ def parse(worldfile, robot_path=None):
                 wall = None
 
     return world
-
