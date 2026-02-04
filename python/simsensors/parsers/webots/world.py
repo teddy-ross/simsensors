@@ -16,13 +16,12 @@ You should have received a copy of the GNU General Public License
 along with this program. If not, see <http:--www.gnu.org/licenses/>.
 '''
 
-from simsensors.world import World
 from simsensors.parsers.webots.utils import parse_vec, parse_string, try_parse
 
 
 def parse(worldfile, robot_path=None):
 
-    world = World()
+    world = {'walls': []}
 
     with open(worldfile) as file:
 
@@ -41,8 +40,9 @@ def parse(worldfile, robot_path=None):
 
             if '}' in line:
                 if wall is not None:
-                    print(wall)
-                    world.walls.append(wall)
+                    if 'rotation' not in wall:
+                        wall['rotation'] = (0, 0, 1, 0)
+                    world['walls'].append(wall)
                 wall = None
 
     return world

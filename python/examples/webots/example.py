@@ -17,6 +17,8 @@
    along with this program. If not, see <http:--www.gnu.org/licenses/>.
 '''
 
+from pprint import pprint
+
 from simsensors.parsers.webots.world import parse
 
 DATADIR = '../../../data/webots/'
@@ -25,6 +27,8 @@ WORLD = DATADIR + 'twoexit.wbt'
 ROBOT = DATADIR + 'DiyQuad.proto'
 
 world = parse(WORLD)
+
+pprint(world)
 
 '''
 int main(int argc, char ** argv) 
