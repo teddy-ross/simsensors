@@ -17,25 +17,8 @@ along with this program. If not, see <http:--www.gnu.org/licenses/>.
 '''
 
 from simsensors.world import World
-from simsensors.parsers.webots.utils import try_parse_vec, try_parse_string
+from simsensors.parsers.webots.utils import parse_vec, parse_string, try_parse
 
-def _parse_wall(line, wall):
-
-    translation = try_parse_vec(line, 'translation')
-    if translation is not None:
-        wall['translation'] = translation
-
-    rotation = try_parse_vec(line, 'rotation')
-    if rotation is not None:
-        wall['rotation'] = rotation
-
-    size = try_parse_vec(line, 'size')
-    if size is not None:
-        wall['size'] = size
-
-    name = try_parse_string(line, 'name')
-    if name is not None:
-        wall['name'] = name
 
 def parse(worldfile, robot_path=None):
 
@@ -51,7 +34,10 @@ def parse(worldfile, robot_path=None):
                 wall = {}
 
             if wall is not None:
-                _parse_wall(line, wall)
+                try_parse(wall, line, 'translation', parse_vec)
+                try_parse(wall, line, 'size', parse_vec)
+                try_parse(wall, line, 'size', parse_vec)
+                try_parse(wall, line, 'name', parse_string)
 
             if '}' in line:
                 if wall is not None:
