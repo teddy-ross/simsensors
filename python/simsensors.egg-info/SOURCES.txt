@@ -1,7 +1,0 @@
-setup.py
-simsensors/__init__.py
-simsensors/world.py
-simsensors.egg-info/PKG-INFO
-simsensors.egg-info/SOURCES.txt
-simsensors.egg-info/dependency_links.txt
-simsensors.egg-info/top_level.txt
