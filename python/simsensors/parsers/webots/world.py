@@ -33,7 +33,7 @@ def parse(worldfile, robot_path=None):
             if wall is not None:
                 try_parse(wall, line, 'translation', parse_vec)
                 try_parse(wall, line, 'size', parse_vec)
-                try_parse(wall, line, 'size', parse_vec)
+                try_parse(wall, line, 'rotation', parse_vec)
                 try_parse(wall, line, 'name', parse_string)
 
             if '}' in line:
