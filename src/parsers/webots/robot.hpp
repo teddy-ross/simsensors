@@ -71,6 +71,9 @@ namespace simsens {
                             ParserUtils::try_parse_rotation(line, "rotation",
                                         rangefinder->rotation);
 
+                            ParserUtils::try_parse_name(line,
+                                    rangefinder->name);
+
                             if (ParserUtils::string_contains(line, "}") ||
                                     ParserUtils::string_contains(line, "children")) {
                                 robot.rangefinders.push_back(rangefinder);

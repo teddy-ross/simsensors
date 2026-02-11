@@ -32,11 +32,11 @@ int main(int argc, char ** argv)
 
         simsens::World world = {};
         simsens::WorldParser::parse(argv[1], world);
-        world.report();
+        world.dump();
 
         simsens::Robot robot = {};
         simsens::RobotParser::parse(argv[2], robot);
-        robot.report();
+        robot.dump();
     }
 
     return 0;

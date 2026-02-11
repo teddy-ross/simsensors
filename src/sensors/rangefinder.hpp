@@ -53,6 +53,7 @@ namespace simsens {
             void dump()
             {
                 printf("Rangefinder: \n");
+                printf("  name: %s\n", name);
                 printf("  fov: %3.3fr\n", field_of_view_radians);
                 printf("  width: %d\n", width);
                 printf("  height: %d\n", height);
@@ -74,6 +75,7 @@ namespace simsens {
             double field_of_view_radians;
             vec3_t translation;
             rotation_t rotation;
+            char name[100];
 
             int distance_on_beam(
                     const pose_t & robot_pose,
@@ -100,13 +102,6 @@ namespace simsens {
                     const auto newdist = intersect_with_wall(
                             location, azimuth, elevation, *wall,
                             &intersection);
-
-                    /*
-                       if (dbg_intersection!=nullptr && newdist < dist) {
-                       dbg_intersection->x = intersection.x;
-                       dbg_intersection->y = intersection.y;
-                       dbg_intersection->z = intersection.z;
-                       }*/
 
                     dist = min(dist, newdist);
                 }

@@ -28,7 +28,7 @@ namespace simsens {
 
             vector<Rangefinder *> rangefinders;
 
-            void report()
+            void dump()
             {
                 for (auto rangefinder : rangefinders) {
                     rangefinder->dump();

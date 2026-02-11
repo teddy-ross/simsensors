@@ -101,7 +101,7 @@ namespace simsens {
                 return robotPose;
             }
 
-            void report()
+            void dump()
             {
                 for (auto wall : walls) {
                     wall->dump();
