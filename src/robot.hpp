@@ -28,7 +28,7 @@ namespace simsens {
 
         public:
 
-            std::map<char *, Rangefinder *> rangefinders;
+            std::map<string, Rangefinder *> rangefinders;
 
             void dump()
             {
