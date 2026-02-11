@@ -18,6 +18,8 @@
 
 #pragma once
 
+#include <map>
+
 #include <simsensors/src/sensors/rangefinder.hpp>
 
 namespace simsens {
@@ -26,12 +28,12 @@ namespace simsens {
 
         public:
 
-            vector<Rangefinder *> rangefinders;
+            std::map<char *, Rangefinder *> rangefinders;
 
             void dump()
             {
                 for (auto rangefinder : rangefinders) {
-                    rangefinder->dump();
+                    rangefinder.second->dump();
                 }
             }
     };

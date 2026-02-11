@@ -76,7 +76,7 @@ namespace simsens {
 
                             if (ParserUtils::string_contains(line, "}") ||
                                     ParserUtils::string_contains(line, "children")) {
-                                robot.rangefinders.push_back(rangefinder);
+                                robot.rangefinders.insert({rangefinder->name, rangefinder});
                                 rangefinder = nullptr;
                             }
                         }
