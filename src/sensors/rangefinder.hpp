@@ -29,6 +29,11 @@ namespace simsens {
 
         public:
 
+            int width;
+            int height; 
+            double min_distance_m;
+            double max_distance_m;
+
             void read(const pose_t & robot_pose, World & world,
                     int * distances_mm)
             {
@@ -38,16 +43,6 @@ namespace simsens {
 
                     distances_mm[k] = distance_on_beam(robpose, world.walls, k);
                 }
-            }
-
-            int getWidth()
-            {
-                return this->width;
-            }
-
-            int getHeight()
-            {
-                return this->height;
             }
 
             void dump()
@@ -68,10 +63,6 @@ namespace simsens {
 
         private:
 
-            int width;
-            int height; 
-            double min_distance_m;
-            double max_distance_m;
             double field_of_view_radians;
             vec3_t translation;
             rotation_t rotation;

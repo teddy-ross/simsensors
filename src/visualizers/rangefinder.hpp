@@ -28,17 +28,14 @@ namespace simsens {
 
         public:
 
-            RangefinderVisualizer(Rangefinder * rangefinder)
+            static void show(
+                    const int * distances_mm,
+                    const double min_distance_m,
+                    const double max_distance_m,
+                    const int width,
+                    const int height,
+                    const int scaleup)
             {
-                this->rangefinder = rangefinder;
-            }
-
-            void show(const int * distances_mm, const int scaleup,
-                    const bool visible=true) 
-            {
-                const int width = this->rangefinder->getWidth();
-                const int height = this->rangefinder->getHeight();
-
                 const int new_width = width * scaleup;
                 const int new_height = height * scaleup;
 
@@ -48,37 +45,22 @@ namespace simsens {
 
                     for (uint8_t y=0; y<height; ++y) {
 
-                        const int d_mm =
-                            distances_mm[y * width + x];
+                        const int d_mm = distances_mm[y * width + x];
+
+                        const uint8_t gray = d_mm == -1 ? 255 : 
+                            (uint8_t)((d_mm/1000. - min_distance_m) /
+                                    (max_distance_m - min_distance_m) * 255);
 
                         cv::rectangle(img,
                                 cv::Point(x*scaleup, y*scaleup),
                                 cv::Point((x+1)*scaleup, (y+1)*scaleup),
-                                visible ? distance_to_grayscale(d_mm) : 0, 
-                                -1);
+                                gray, -1);
                     }
                 }
 
                 cv::imshow("lidar", img);
 
                 cv::waitKey(1);
-
-                _visible = true;
-            }
-
-        private:
-
-            Rangefinder * rangefinder;
-
-            bool _visible;
-
-            uint8_t distance_to_grayscale(const int d_mm)
-            {
-                const double dmin_m = this->rangefinder->min_distance_m;
-                const double dmax_m = this->rangefinder->max_distance_m;
-
-                return d_mm == -1 ? 255 : 
-                    (uint8_t)((d_mm/1000. - dmin_m) / (dmax_m - dmin_m) * 255);
             }
     };
 
