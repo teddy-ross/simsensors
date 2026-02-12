@@ -12,7 +12,7 @@
 #  You should have received a copy of the GNU General Public License
 #  along with this program. If not, see <http:--www.gnu.org/licenses/>.
 
-CFLAGS = -O3 -std=c++11 -Wall -Wextra
+CFLAGS = -O3 -std=c++17 -Wall -Wextra
 
 ROOTDIR = ../../..
 
